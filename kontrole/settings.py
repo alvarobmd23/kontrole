@@ -20,13 +20,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-mh5$b5^x22!9ihdn&*y743o%^n7q4@6%(0b*&ohs#=6(#)-8ft'
+SECRET_KEY = 'django-insecure-)!^n18(4j&3z8=p!48gshn)d=e9&=8^zutp$a964kht8y2)iqa'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# Troca do user padrão do Django para o User que criamos
+AUTH_USER_MODEL = 'account.User'
 
 # Application definition
 
@@ -37,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'account',
 ]
 
 MIDDLEWARE = [
