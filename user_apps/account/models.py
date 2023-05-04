@@ -10,7 +10,8 @@ from django.db import models
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
-from company.models import Company
+from user_apps.company.models import Company
+from user_apps.profiles.models import Profile
 
 
 class UserManager(BaseUserManager):
@@ -43,6 +44,7 @@ class User (AbstractBaseUser, PermissionsMixin):
     last_name = models.CharField(_('last name'), max_length=30)
     email = models.EmailField(_('email address'), max_length=255, unique=True)
     company = models.ForeignKey(Company, on_delete=models.PROTECT)
+    profile = models.ForeignKey(Profile, on_delete=models.PROTECT)
     is_staff = models.BooleanField(_('staff status'), default=False, help_text=_(
         'Designates whether the user can log into this admin site.'))
     is_active = models.BooleanField(_('active'), default=True, help_text=_(
