@@ -1,10 +1,8 @@
 from django.urls import path
 
-from user_apps.account.views import signup
-
-from .views import NewCompany
+from .views import EditCompany, NewCompany
 
 urlpatterns = [
     path('new/', NewCompany.as_view(), name='new_company'),
-    path('signup/', signup, name='signup')
+    path('edit/<int:company_id>/', EditCompany.as_view(), name='edit_company'),
 ]

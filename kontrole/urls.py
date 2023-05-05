@@ -23,5 +23,6 @@ urlpatterns = [
     path('company/', include('user_apps.company.urls')),
     path('profiles/', include('user_apps.profiles.urls')),
     path('users/', include('user_apps.account.urls')),
+    path('', include('modules.dashboard.urls')),
     path('persons/', include('modules.persons.urls')),
 ]

@@ -38,7 +38,7 @@ class UserManager(BaseUserManager):
 class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(max_length=254, unique=True)
     name = models.CharField(max_length=254, null=True, blank=True)
-    company = models.ForeignKey(
+    company = models.OneToOneField(
         Company, on_delete=models.PROTECT, blank=True, null=True)
     profile = models.ForeignKey(
         Profile, on_delete=models.PROTECT, blank=True, null=True)

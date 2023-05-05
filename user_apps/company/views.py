@@ -1,7 +1,6 @@
-from django.forms.models import BaseModelForm
 from django.http import HttpResponse
 from django.shortcuts import render
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
 
 from .models import Company
 
@@ -9,3 +8,15 @@ from .models import Company
 class NewCompany(CreateView):
     model = Company
     fields = ('company_name', 'company_nickname')
+
+    def form_valid(self, form):
+        obj = form.save()
+        user_new = self.request.user
+        user_new.company = obj
+        user_new.save()
+        return HttpResponse('ok')
+
+
+class EditCompany(UpdateView):
+    model = Company
+    fields = ('company_name', 'company_nickname', 'logo')

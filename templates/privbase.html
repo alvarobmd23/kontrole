@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
+    <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <title>{% block title %} {% endblock title %}</title>
+</head>
+<body>
+
+
+<!-- O cabeçalho do nosso site -->
+    <div id="header" class="container">    
+        <div class="row">
+            <div class="col bg-success text-start">
+                Logo
+            </div>
+            <div class="col bg-success text-end">
+                Olá {{usernow.name}} - 
+                {% if usernow.company %}
+                    {{usernow.company}}
+                {% else %}
+                    <a href="">Adicione uma empresa aqui</a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+<!-- O menu do nosso site -->
+    <div id="menu" class="container">    
+        <div class="row">
+            <div class="col bg-danger text-center">
+                Menu
+            </div>
+        </div>
+    </div>
+
+<!-- Conteúdo do nosso site, esse será definido nas páginas específicas -->
+    <div id="content" class="container">    
+
+
+        {% block body%} {% endblock body %}
+
+    </div>
+
+<!-- Rodapé do nosso site -->
+    <div id="footer" class="container">    
+        <div class="row">
+            <div class="col bg-success text-center">
+                <p>&copy 2023 - Kontrole</p>
+            </div>
+        </div>
+    </div>
+
+
+
+</body>
+</html>

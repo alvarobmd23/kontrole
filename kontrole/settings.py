@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'user_apps.profiles',
     'user_apps.account',
     'modules.persons',
+    'modules.dashboard',
     'core',
 ]
 
