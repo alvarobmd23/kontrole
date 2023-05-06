@@ -20,7 +20,13 @@
                 Logo
             </div>
             <div class="col bg-success text-end">
-                Olá {{usernow.name}} - 
+                Olá 
+                {% if usernow.name %}
+                    {{usernow.name}}
+                {% else %}
+                    {{usernow.email}}
+                {% endif %}
+                 - 
                 {% if usernow.company %}
                     {{usernow.company}}
                 {% else %}
