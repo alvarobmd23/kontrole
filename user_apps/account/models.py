@@ -4,7 +4,6 @@ from django.db import models
 from django.utils import timezone
 
 from user_apps.company.models import Company
-from user_apps.profiles.models import Profile
 
 
 class UserManager(BaseUserManager):
@@ -40,8 +39,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     name = models.CharField(max_length=254, null=True, blank=True)
     company = models.OneToOneField(
         Company, on_delete=models.PROTECT, blank=True, null=True)
-    profile = models.ForeignKey(
-        Profile, on_delete=models.PROTECT, blank=True, null=True)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)

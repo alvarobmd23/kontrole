@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('account', '0003_user_profile'),
+        ('account', '0002_user_company'),
     ]
 
     operations = [
@@ -29,10 +29,6 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name='user',
             name='last_name',
-        ),
-        migrations.RemoveField(
-            model_name='user',
-            name='profile',
         ),
         migrations.RemoveField(
             model_name='user',
