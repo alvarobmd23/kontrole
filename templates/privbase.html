@@ -21,17 +21,21 @@
             </div>
             <div class="col bg-success text-end">
                 Olá 
+                <a href=" {% url 'accounts:profile' %}">
                 {% if usernow.name %}
                     {{usernow.name}}
                 {% else %}
                     {{usernow.email}}
                 {% endif %}
+                </a>
                  - 
                 {% if usernow.company %}
-                    {{usernow.company}}
+                <a href="{% url 'company:edit_company' %}">{{usernow.company}}</a>
                 {% else %}
-                    <a href="">Adicione uma empresa aqui</a>
+                    <a href="{% url 'company:new_company' %}">Adicione uma empresa aqui</a>
                 {% endif %}
+                 | <a href=" {% url 'accounts:logout' %}">Logout</a>
+            
             </div>
         </div>
     </div>

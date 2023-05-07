@@ -22,5 +22,9 @@ class EditCompany(UpdateView):
     model = Company
     fields = ('company_name', 'company_nickname')
 
+    def get_object(self):
+        return self.request.user.company
+
     def form_valid(self, form):
-        return reverse('dashboard')
+        obj = form.save()
+        return redirect('dashboard')
