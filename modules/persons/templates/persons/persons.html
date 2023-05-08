@@ -1,5 +1,23 @@
-{% extends 'base.html' %}
+{% extends 'profbase.html' %}
 
 {% block title %}Kontrole{% endblock title %}
+
+{% block list_options%}
+    <div class="row">
+        <div class="col bg-secondary">
+            <ul class="list-group list-group-horizontal justify-content-end">
+                <li class="list-group-item">
+                <a href="">New</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="">Edit</a>
+                </li>
+                <li class="list-group-item">
+                    <a href="">Delete</a>
+                </li>
+            </ul>            
+        </div>
+    </div>
+{% endblock list_options %}
 
 {% block body %}Persons - Seja bem vindo{% endblock body %}

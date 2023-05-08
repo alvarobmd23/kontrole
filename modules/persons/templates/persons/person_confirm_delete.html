@@ -1,0 +1,12 @@
+{% extends 'profbase.html' %}
+
+{% block title %}Kontrole{% endblock title %}
+
+{% block body %}
+    <h1>Deletar Pessoa - {{person.name}} </h1>
+    <form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit" class="btn btn-danger">Confirmar</button>
+    </form>
+{% endblock body %}

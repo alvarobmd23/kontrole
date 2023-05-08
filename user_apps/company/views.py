@@ -15,7 +15,7 @@ class NewCompany(CreateView):
         user_new = self.request.user
         user_new.company = obj
         user_new.save()
-        return redirect('dashboard')
+        return redirect('dashboard:dashboard')
 
 
 class EditCompany(UpdateView):
@@ -24,7 +24,3 @@ class EditCompany(UpdateView):
 
     def get_object(self):
         return self.request.user.company
-
-    def form_valid(self, form):
-        obj = form.save()
-        return redirect('dashboard')

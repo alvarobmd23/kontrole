@@ -1,0 +1,42 @@
+{% extends 'profbase.html' %}
+
+{% block title %}Kontrole{% endblock title %}
+
+{% block list_options %}
+    <div class="row">
+        <div class="col bg-secondary">
+            <ul class="list-group list-group-horizontal justify-content-end">
+                <li class="list-group-item btn btn-light">
+                <a href="{% url 'persons:persons_new'%}">New</a>
+                </li>
+            </ul>            
+        </div>
+    </div>
+{% endblock list_options %}
+
+{% block body %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Name</th>
+            <th scope="col">NickName</th>
+            <th class="text-center" scope="col">Options</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for person in object_list %}
+            <tr>
+                <th scope="row">{{ person.id }}</th>
+                <td>{{ person.name }}</td>
+                <td>{{ person.nickname }}</td>
+                <td class="text-center"><a href="{% url 'persons:persons_update' person.id %}"><i class="fas fa-edit text-primary"></i></a>
+                    <a href="{% url 'persons:persons_delete' person.id %}"><i class="fas fa-trash-alt text-danger"></i></a>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+{% endblock body %}

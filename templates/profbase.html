@@ -8,6 +8,9 @@
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
     <script src="{% static 'fontawesomefree/js/all.min.js' %}"></script>
     <link href="{% static 'fontawesomefree/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <script src="{% static 'fontawesomefree/js/fontawesome.js' %}"></script>
+    <script src="{% static 'fontawesomefree/js/solid.js' %}"></script>
+    <script src="{% static 'fontawesomefree/js/brands.js' %}"></script>
     <title>{% block title %} {% endblock title %}</title>
 </head>
 <body>
@@ -17,25 +20,24 @@
     <div id="header" class="container">    
         <div class="row">
             <div class="col bg-success text-start">
-                Logo
+                <a href=" {% url 'dashboard:dashboard' %}">Logo</a>
             </div>
             <div class="col bg-success text-end">
                 Olá 
                 <a href=" {% url 'accounts:profile' %}">
-                {% if usernow.name %}
-                    {{usernow.name}}
-                {% else %}
-                    {{usernow.email}}
-                {% endif %}
+                    {% if user.name %}
+                        {{user.name}}
+                    {% else %}
+                        {{user.email}}
+                    {% endif %}
                 </a>
-                 - 
-                {% if usernow.company %}
-                <a href="{% url 'company:edit_company' %}">{{usernow.company}}</a>
+                  - 
+                {% if user.company %}
+                    <a href="{% url 'company:edit_company' %}">{{user.company}}</a>
                 {% else %}
                     <a href="{% url 'company:new_company' %}">Adicione uma empresa aqui</a>
                 {% endif %}
-                 | <a href=" {% url 'accounts:logout' %}">Logout</a>
-            
+                  | <a href=" {% url 'accounts:logout' %}">Logout</a>
             </div>
         </div>
     </div>
@@ -43,18 +45,23 @@
 <!-- O menu do nosso site -->
     <div id="menu" class="container">    
         <div class="row">
-            <div class="col bg-danger text-center">
-                Menu
+            <div class="col bg-danger text-start">
+                <ul class="list-group list-group-horizontal">
+                    <li class="list-group-item">
+                    <a href="{% url 'dashboard:dashboard' %}">Dasboard</a>
+                    </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'persons:persons' %}">Persons</a>
+                    </li>
+                </ul>
             </div>
         </div>
     </div>
 
 <!-- Conteúdo do nosso site, esse será definido nas páginas específicas -->
     <div id="content" class="container">    
-
-
-        {% block body%} {% endblock body %}
-
+        {% block list_options %} {% endblock list_options %}
+        {% block body %} {% endblock body %}
     </div>
 
 <!-- Rodapé do nosso site -->
