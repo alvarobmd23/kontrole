@@ -23,5 +23,7 @@ urlpatterns = [
     path('company/', include('user_apps.company.urls', namespace='company')),
     path('accounts/', include('user_apps.account.urls', namespace='accounts')),
     path('', include('modules.dashboard.urls', namespace='dashboard')),
-    path('persons/', include('modules.persons.urls', namespace='persons')),
+    path('person/persons/', include('modules.person.persons.urls', namespace='persons')),
+    path('finance/chart_of_accounts/',
+         include('modules.finance.chart_of_accounts.urls', namespace='chart_of_accounts')),
 ]

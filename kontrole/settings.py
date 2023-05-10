@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'fontawesomefree',
     'user_apps.company',
     'user_apps.account',
-    'modules.persons',
+    'modules.person.persons',
+    'modules.finance.chart_of_accounts',
     'modules.dashboard',
     'core',
 ]

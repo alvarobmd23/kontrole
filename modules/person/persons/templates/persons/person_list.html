@@ -19,18 +19,18 @@
 <table class="table">
     <thead>
         <tr>
-            <th scope="col">Id</th>
             <th scope="col">Name</th>
             <th scope="col">NickName</th>
+            <th scope="col">CPF/CNPJ</th>
             <th class="text-center" scope="col">Options</th>
         </tr>
     </thead>
     <tbody>
         {% for person in object_list %}
             <tr>
-                <th scope="row">{{ person.id }}</th>
-                <td>{{ person.name }}</td>
+                <th scope="row">{{ person.name }}</th>
                 <td>{{ person.nickname }}</td>
+                <td>{{ person.cpfcnpj }}</td>
                 <td class="text-center"><a href="{% url 'persons:persons_update' person.id %}"><i class="fas fa-edit text-primary"></i></a>
                     <a href="{% url 'persons:persons_delete' person.id %}"><i class="fas fa-trash-alt text-danger"></i></a>
                 </td>

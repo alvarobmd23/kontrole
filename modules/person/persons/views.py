@@ -23,7 +23,8 @@ class Persons_List(ListView):
 
 class Persons_New(CreateView):
     model = Person
-    fields = ['name', 'nickname']
+    fields = ['name', 'nickname', 'typeperson', 'cpfcnpj',
+              'address', 'city', 'country', 'phone', 'email', 'obs']
 
     def form_valid(self, form):
         person = form.save(commit=False)
@@ -34,7 +35,8 @@ class Persons_New(CreateView):
 
 class Persons_Update(UpdateView):
     model = Person
-    fields = ['name', 'nickname']
+    fields = ['name', 'nickname', 'typeperson', 'cpfcnpj',
+              'address', 'city', 'country', 'phone', 'email', 'obs']
 
 
 class Persons_Delete(DeleteView):
