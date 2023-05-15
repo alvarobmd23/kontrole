@@ -1,6 +1,8 @@
 from django.contrib import admin
 
-from .models import Chart_of_Accounts_Sintetico, ClassificationAccount
+# Register your models here.
+from .models import Analitic, Sintetic, TypeAccount
 
-admin.site.register(Chart_of_Accounts_Sintetico)
-admin.site.register(ClassificationAccount)
+admin.site.register(TypeAccount)
+admin.site.register(Sintetic)
+admin.site.register(Analitic)

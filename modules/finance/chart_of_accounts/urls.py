@@ -1,21 +1,24 @@
 from django.contrib.auth.decorators import login_required
 from django.urls import path
 
-from .views import (Chart_of_Accounts_Sintetico_Delete,
-                    Chart_of_Accounts_Sintetico_List,
-                    Chart_of_Accounts_Sintetico_New,
-                    Chart_of_Accounts_Sintetico_Update,
-                    ClassificationAccount_List)
+from .views import (Analitic_Delete, Analitic_New, Analitic_Update,
+                    Sintetic_Delete, Sintetic_New, Sintetic_Update, indexview)
 
-app_name = 'chart_of_accounts'
+app_name = 'chart_of_account'
 
 urlpatterns = [
-    path('sintetic/', login_required(Chart_of_Accounts_Sintetico_List.as_view()),
-         name='chart_of_accounts_list'),
-    path('sintetic/new/', login_required(Chart_of_Accounts_Sintetico_New.as_view()),
-         name='chart_of_accounts_sintetico_new'),
-    path('sintetic/update/<int:pk>', login_required(Chart_of_Accounts_Sintetico_Update.as_view()),
-         name='chart_of_accounts_sintetico_update'),
-    path('sintetic/delete/<int:pk>', login_required(Chart_of_Accounts_Sintetico_Delete.as_view()),
-         name='chart_of_accounts_sintetico_delete')
+    path('', login_required(indexview), name='chart_of_account'),
+    path('sintetic_new/', login_required(Sintetic_New.as_view()),
+         name='sintetic_new'),
+    path('sintetic_update/<int:pk>', login_required(Sintetic_Update.as_view()),
+         name='sintetic_update'),
+    path('sintetic_delete/<int:pk>', login_required(Sintetic_Delete.as_view()),
+         name='sintetic_delete'),
+    path('analitic_new/', login_required(Analitic_New.as_view()),
+         name='analitic_new'),
+    path('analitic_update/<int:pk>', login_required(Analitic_Update.as_view()),
+         name='analitic_update'),
+    path('analitic_delete/<int:pk>', login_required(Analitic_Delete.as_view()),
+         name='analitic_delete')
+
 ]

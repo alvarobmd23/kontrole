@@ -38,7 +38,15 @@ class Persons_Update(UpdateView):
     fields = ['name', 'nickname', 'typeperson', 'cpfcnpj',
               'address', 'city', 'country', 'phone', 'email', 'obs']
 
+    def get_queryset(self):
+        company_user = self.request.user.company
+        return Person.objects.filter(company=company_user)
+
 
 class Persons_Delete(DeleteView):
     model = Person
     success_url = reverse_lazy('persons:persons')
+
+    def get_queryset(self):
+        company_user = self.request.user.company
+        return Person.objects.filter(company=company_user)

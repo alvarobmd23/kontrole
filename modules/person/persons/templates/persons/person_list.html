@@ -27,14 +27,14 @@
     </thead>
     <tbody>
         {% for person in object_list %}
-            <tr>
-                <th scope="row">{{ person.name }}</th>
-                <td>{{ person.nickname }}</td>
-                <td>{{ person.cpfcnpj }}</td>
-                <td class="text-center"><a href="{% url 'persons:persons_update' person.id %}"><i class="fas fa-edit text-primary"></i></a>
-                    <a href="{% url 'persons:persons_delete' person.id %}"><i class="fas fa-trash-alt text-danger"></i></a>
-                </td>
-            </tr>
+        <tr>
+            <th scope="row">{{ person.name }}</th>
+            <td>{{ person.nickname }}</td>
+            <td>{{ person.cpfcnpj }}</td>
+            <td class="text-center"><a href="{% url 'persons:persons_update' person.id %}"><i class="fas fa-edit text-primary"></i></a>
+                <a href="{% url 'persons:persons_delete' person.id %}"><i class="fas fa-trash-alt text-danger"></i></a>
+            </td>
+        </tr>
         {% endfor %}
     </tbody>
     </table>

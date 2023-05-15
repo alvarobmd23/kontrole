@@ -1,0 +1,12 @@
+{% extends 'profbase.html' %}
+
+{% block title %}Kontrole{% endblock title %}
+
+{% block body %}
+    <h1>Sintetic Account - {{sintetic.sintetic}} </h1>
+    <form method="post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Save</button>
+    </form>
+{% endblock body %}
