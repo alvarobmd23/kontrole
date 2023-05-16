@@ -1,26 +1,32 @@
 
+from typing import Any, Dict
+
 from django.db.models.query import QuerySet
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
+from .forms import AnaliticForm, SinteticForm
 from .models import Analitic, Sintetic, TypeAccount
 
 
 def indexview(request):
-    company_user = Sintetic.objects.filter(company=request.user.company)
+    company_user = Sintetic.objects.filter(
+        company=request.user.company).order_by('typeaccount', 'sintetic', 'analitic')
     queryset = company_user.values(
-        'company', 'company__company_name', 'typeaccount__typeaccount', 'sintetic', 'analitic__analitic').distinct()
+        'company', 'company__company_name', 'typeaccount__typeaccount', 'sintetic', 'id', 'analitic__analitic', 'analitic__id').distinct()
     return render(request, 'chart_of_accounts/chart_of_accounts.html', {'objects': queryset})
 
 
 class Analitic_New(CreateView):
-    model = Analitic
-    fields = ['sintetic', 'analitic']
 
-    def get_queryset(self):
-        company_user = self.request.user.company
-        return Sintetic.objects.filter(company=company_user)
+    model = Analitic
+    form_class = AnaliticForm
+
+    def get_form_kwargs(self):
+        kwargs = super(Analitic_New, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def form_valid(self, form):
         analitic = form.save(commit=False)
@@ -31,11 +37,12 @@ class Analitic_New(CreateView):
 
 class Analitic_Update(UpdateView):
     model = Analitic
-    fields = ['sintetic', 'analitic']
+    form_class = AnaliticForm
 
-    def get_queryset(self):
-        company_user = self.request.user.company
-        return Analitic.objects.filter(company=company_user)
+    def get_form_kwargs(self):
+        kwargs = super(Analitic_Update, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
 
 class Analitic_Delete(DeleteView):
@@ -49,7 +56,12 @@ class Analitic_Delete(DeleteView):
 
 class Sintetic_New(CreateView):
     model = Sintetic
-    fields = ['typeaccount', 'sintetic']
+    form_class = SinteticForm
+
+    def get_form_kwargs(self):
+        kwargs = super(Sintetic_New, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
     def form_valid(self, form):
         sintetic = form.save(commit=False)
@@ -60,11 +72,12 @@ class Sintetic_New(CreateView):
 
 class Sintetic_Update(UpdateView):
     model = Sintetic
-    fields = ['typeaccount', 'sintetic']
+    form_class = SinteticForm
 
-    def get_queryset(self):
-        company_user = self.request.user.company
-        return Sintetic.objects.filter(company=company_user)
+    def get_form_kwargs(self):
+        kwargs = super(Sintetic_Update, self).get_form_kwargs()
+        kwargs.update({'user': self.request.user})
+        return kwargs
 
 
 class Sintetic_Delete(DeleteView):

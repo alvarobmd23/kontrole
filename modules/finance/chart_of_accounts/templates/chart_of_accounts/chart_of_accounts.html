@@ -30,9 +30,24 @@
             <ul>
                 {% for s in sintetic_list %}
                 <li>{{ s.grouper }}
+                         {% regroup s.list by id as id_list %}
+                            {% for j in id_list %}       
+                                <a href="/finance/chart_of_accounts/sintetic_update/{{ j.grouper }}"><i class="fas fa-edit text-primary"></i></a>
+                                <a href="/finance/chart_of_accounts/sintetic_delete/{{ j.grouper }}"><i class="fas fa-trash-alt text-danger"></i></a>
+                            {% endfor %} 
                     <ul>
                     {% for a in s.list %}
-                        <li>{{ a.analitic__analitic }}</li>
+                        <li>
+                        {% if a.analitic__analitic != None %} 
+                            {{ a.analitic__analitic }}
+                            <a href="/finance/chart_of_accounts/analitic_update/{{ a.analitic__id }}"><i class="fas fa-edit text-primary"></i></a>
+                            <a href="/finance/chart_of_accounts/analitic_delete/{{ a.analitic__id }}"><i class="fas fa-trash-alt text-danger"></i></a>
+                        {% else %}
+                            Cadastrar Conta ANALÍTICA
+                        {% endif %}
+
+
+                        </li>
                     {% endfor %}
                     </ul> 
                 </li>

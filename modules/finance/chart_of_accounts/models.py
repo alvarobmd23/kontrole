@@ -10,7 +10,7 @@ class TypeAccount(models.Model):
     typeaccount = models.CharField(max_length=100)
 
     def get_absolute_url(self):
-        return reverse("chart_of_accounts:chart_of_account")
+        return reverse("chart_of_account:chart_of_account")
 
     def __str__(self):
         return self.typeaccount
@@ -22,7 +22,7 @@ class Sintetic(models.Model):
     sintetic = models.CharField(max_length=100)
 
     def get_absolute_url(self):
-        return reverse("chart_of_accounts:chart_of_account")
+        return reverse("chart_of_account:chart_of_account")
 
     def __str__(self):
         return self.sintetic
@@ -34,7 +34,7 @@ class Analitic(models.Model):
     analitic = models.CharField(max_length=100)
 
     def get_absolute_url(self):
-        return reverse("chart_of_accounts:chart_of_account")
+        return reverse("chart_of_account:chart_of_account")
 
     def __str__(self):
         return self.analitic
