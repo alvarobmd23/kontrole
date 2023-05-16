@@ -1,4 +1,5 @@
 {% extends 'profbase.html' %}
+{% load bootstrap %}
 
 {% block title %}Kontrole{% endblock title %}
 
@@ -6,7 +7,8 @@
     <h1>Sintetic Account - {{sintetic.sintetic}} </h1>
     <form method="post">
     {% csrf_token %}
-    {{ form }}
-    <button type="submit">Save</button>
+    {{ form|bootstrap }}
+    <br/>
+    <button type="submit" class="btn btn-primary">Save</button>
     </form>
 {% endblock body %}

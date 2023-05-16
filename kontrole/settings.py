@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fontawesomefree',
+    'bootstrapform',
     'user_apps.company',
     'user_apps.account',
     'modules.person.persons',
