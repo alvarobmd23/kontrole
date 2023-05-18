@@ -13,6 +13,7 @@
     <script src="{% static 'fontawesomefree/js/solid.js' %}"></script>
     <script src="{% static 'fontawesomefree/js/brands.js' %}"></script>
     <title>{% block title %} {% endblock title %}</title>
+
 </head>
 <body>
 
@@ -57,33 +58,50 @@
                     <li class="list-group-item">
                         <a href="{% url 'chart_of_account:chart_of_account' %}">Chart of Accounts</a>
                     </li>
+                    <li class="list-group-item">
+                        <a href="{% url 'document_type:document_type' %}">Document Type</a>
+                    </li>
                 </ul>
             </div>
         </div>
     </div>
 
-<!-- Pop-up de Mensagens e avisos -->
-    <div id="content" class="container">    
-        {% block list_options %} {% endblock list_options %}
+<!-- Conteiner central do body -->
+    <div id="content" class="container">
+        <!-- Menu interno de cada página -->    
+        <div class="container">
+            <div class="row">
+                {% block list_options %} {% endblock list_options %}
+            </div>
+        </div>
+
+        <!-- Pop-up de Mensagens e avisos -->
+        <div class="container w-25 float-end">
+            <div class="row">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div id="message_container" class="alert alert-{{ message.tags }} border-0 p-1 m-2 shadow fade show" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Conteúdo do nosso site, esse será definido nas páginas específicas -->       
+        <div class="container">
+            <div class="row">
+                {% block body %} {% endblock body %}
+            </div>
+        </div>
         
-        {% if messages %}
-            {% for message in messages %}
-                <div id="message_container" class="alert alert-{{ message.tags }} border-0 w-25 p-1 m-2 float-end shadow" id="msg" role="alert">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endif %}
-
-<!-- Conteúdo do nosso site, esse será definido nas páginas específicas -->       
-
-        {% block body %} {% endblock body %}
         <br/>
     </div>
 
 <!-- Rodapé do nosso site -->
-    <div id="footer" class="container">    
+    <div id="footer" class="container ">    
         <div class="row">
-            <div class="col bg-success text-center">
+            <div class="bg-success text-center">
                 <p>&copy 2023 - Kontrole</p>
             </div>
         </div>

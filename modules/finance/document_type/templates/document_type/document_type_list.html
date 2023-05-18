@@ -1,0 +1,37 @@
+{% extends 'profbase.html' %}
+
+{% block title %}Kontrole{% endblock title %}
+
+{% block list_options %}
+
+    <div class="col bg-secondary">
+        <ul class="list-group list-group-horizontal justify-content-end">
+            <li class="list-group-item btn btn-light">
+            <a href="{% url 'document_type:document_type_new'%}">New</a>
+            </li>
+        </ul>            
+    </div>
+
+{% endblock list_options %}
+
+{% block body %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">Tipo de Documento</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for document_type in object_list %}
+        <tr>
+            <td>{{document_type.document_type}}</td>
+            <td class="text-center"><a href="{% url 'document_type:document_type_update' document_type.id %}"><i class="fas fa-edit text-primary"></i></a>
+                <a href="{% url 'document_type:document_type_delete' document_type.id %}"><i class="fas fa-trash-alt text-danger"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+    </table>
+
+{% endblock body %}

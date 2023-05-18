@@ -1,6 +1,6 @@
 from typing import Any
 
-from django.contrib import auth
+from django.contrib import auth, messages
 from django.contrib.auth.decorators import login_required
 from django.db.models.query import QuerySet
 from django.forms.models import BaseModelForm
@@ -30,6 +30,8 @@ class Persons_New(CreateView):
         person = form.save(commit=False)
         person.company = self.request.user.company
         person.save()
+        messages.success(
+            self.request, 'Pessoa criada com sucesso!', 'alert-success')
         return super(Persons_New, self).form_valid(form)
 
 
@@ -38,9 +40,13 @@ class Persons_Update(UpdateView):
     fields = ['name', 'nickname', 'typeperson', 'cpfcnpj',
               'address', 'city', 'country', 'phone', 'email', 'obs']
 
-    def get_queryset(self):
-        company_user = self.request.user.company
-        return Person.objects.filter(company=company_user)
+    def form_valid(self, form):
+        person = form.save(commit=False)
+        person.company = self.request.user.company
+        person.save()
+        messages.success(
+            self.request, 'Pessoa modificada com sucesso!', 'alert-success')
+        return super(Persons_Update, self).form_valid(form)
 
 
 class Persons_Delete(DeleteView):

@@ -26,4 +26,6 @@ urlpatterns = [
     path('person/persons/', include('modules.person.persons.urls', namespace='persons')),
     path('finance/chart_of_accounts/',
          include('modules.finance.chart_of_accounts.urls', namespace='chart_of_accounts')),
+    path('finance/document_type/',
+         include('modules.finance.document_type.urls', namespace='document_type')),
 ]

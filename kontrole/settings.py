@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'user_apps.account',
     'modules.person.persons',
     'modules.finance.chart_of_accounts',
+    'modules.finance.document_type',
     'modules.dashboard',
     'core',
 ]
