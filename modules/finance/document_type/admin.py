@@ -1,3 +1,5 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Document_Type
+
+admin.site.register(Document_Type)

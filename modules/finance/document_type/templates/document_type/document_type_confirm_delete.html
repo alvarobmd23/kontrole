@@ -3,11 +3,13 @@
 {% block title %}Kontrole{% endblock title %}
 
 {% block body %}
-    <h1>Deletar Tipo de Documento - {{document_type.document_type}} </h1>
-    <form method="post">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit" class="btn btn-danger">Confirmar</button>
-    <a href="{% url 'document_type:document_type'%}" class="btn btn-primary">Voltar</a>
-    </form>
+    <div class="col">
+        <h1>Deletar Tipo de Documento - {{document_type.document_type}} </h1>
+        <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="btn btn-danger">Confirmar</button>
+        <a href="{% url 'document_type:document_type'%}" class="btn btn-primary">Voltar</a>
+        </form>
+    </div>
 {% endblock body %}

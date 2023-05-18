@@ -4,12 +4,14 @@
 {% block title %}Kontrole{% endblock title %}
 
 {% block body %}
-    <h1>Tipo de Documento - {{ document_type.document_type }} </h1>
-    <form method="post">
-    {% csrf_token %}
-    {{ form|bootstrap }}
-    <br/>
-    <button type="submit" class="btn btn-primary">Save</button>
-    <a href="{% url 'document_type:document_type' %}" class="btn btn-danger">Voltar</a>
-    </form>
+    <div class="col">
+        <h1>Tipo de Documento - {{ document_type.document_type }} </h1>
+        <form method="post">
+        {% csrf_token %}
+        {{ form|bootstrap }}
+        <br/>
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a href="{% url 'document_type:document_type' %}" class="btn btn-danger">Voltar</a>
+        </form>
+    </div>
 {% endblock body %}

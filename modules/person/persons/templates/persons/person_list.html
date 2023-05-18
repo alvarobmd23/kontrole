@@ -3,15 +3,15 @@
 {% block title %}Kontrole{% endblock title %}
 
 {% block list_options %}
-    <div class="row">
-        <div class="col bg-secondary">
-            <ul class="list-group list-group-horizontal justify-content-end">
-                <li class="list-group-item btn btn-light">
-                <a href="{% url 'persons:persons_new'%}">New</a>
-                </li>
-            </ul>            
-        </div>
+
+    <div class="col bg-secondary">
+        <ul class="list-group list-group-horizontal justify-content-end">
+            <li class="list-group-item btn btn-light">
+            <a href="{% url 'persons:persons_new'%}">New</a>
+            </li>
+        </ul>            
     </div>
+
 {% endblock list_options %}
 
 {% block body %}

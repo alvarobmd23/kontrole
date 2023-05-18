@@ -3,27 +3,26 @@
 {% block title %}Kontrole{% endblock title %}
 
 {% block list_options%}
-    <div class="row">
-        <div class="col bg-secondary">
-            <ul class="list-group list-group-horizontal justify-content-end">
-                <li class="list-group-item">
-                <a href="{% url 'chart_of_account:sintetic_new'%}">New Sintetic</a>
-                </li>
-                <li class="list-group-item">
-                    <a href="{% url 'chart_of_account:analitic_new'%}">New Analitic</a>
-                </li>
-            </ul>            
-        </div>
+
+    <div class="col bg-secondary">
+        <ul class="list-group list-group-horizontal justify-content-end">
+            <li class="list-group-item">
+            <a href="{% url 'chart_of_account:sintetic_new'%}">New Sintetic</a>
+            </li>
+            <li class="list-group-item">
+                <a href="{% url 'chart_of_account:analitic_new'%}">New Analitic</a>
+            </li>
+        </ul>            
     </div>
+
 {% endblock list_options %}
 
 {% block body %}
 
+<div class="col align-baseline">
     Chart of Accounts - Seja bem vindo
-
-
     {% regroup objects by typeaccount__typeaccount as account_list %}
-    <ul>
+    <ul >
         {% for c in account_list %}
         <li><span class="fw-bold">{{ c.grouper }}</span>
             {% regroup c.list by sintetic as sintetic_list %}
@@ -43,7 +42,7 @@
                             <a href="/finance/chart_of_accounts/analitic_update/{{ a.analitic__id }}"><i class="fas fa-edit text-primary opacity-75"></i></a>
                             <a href="/finance/chart_of_accounts/analitic_delete/{{ a.analitic__id }}"><i class="fas fa-trash-alt text-danger opacity-75"></i></a>
                         {% else %}
-                            Cadastrar Conta ANALÍTICA
+                            <span class="fw-light">Cadastrar Conta ANALÍTICA</span>
                         {% endif %}
 
 
@@ -57,7 +56,7 @@
         </li>
         {% endfor %}
     </ul>
-
+</div>
 
 
 

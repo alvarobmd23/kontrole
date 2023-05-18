@@ -21,11 +21,15 @@ class Sintetic(models.Model):
     company = models.ForeignKey(Company, on_delete=models.PROTECT)
     sintetic = models.CharField(max_length=100)
 
+    @property
+    def concatsintetic(self):
+        return "%s / %s" % (self.typeaccount.typeaccount, self.sintetic)
+
     def get_absolute_url(self):
         return reverse("chart_of_account:chart_of_account")
 
     def __str__(self):
-        return self.sintetic
+        return self.concatsintetic
 
 
 class Analitic(models.Model):
@@ -33,8 +37,12 @@ class Analitic(models.Model):
     sintetic = models.ForeignKey(Sintetic, on_delete=models.PROTECT)
     analitic = models.CharField(max_length=100)
 
+    @property
+    def concatanalitic(self):
+        return "%s / %s" % (self.sintetic.concatsintetic, self.analitic)
+
     def get_absolute_url(self):
         return reverse("chart_of_account:chart_of_account")
 
     def __str__(self):
-        return self.analitic
+        return self.concatanalitic

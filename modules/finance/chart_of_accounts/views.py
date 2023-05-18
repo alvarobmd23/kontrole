@@ -1,18 +1,13 @@
 
-from functools import wraps
-from typing import Any, Dict
 
 from django.contrib import messages
-from django.core.exceptions import PermissionDenied
-from django.db.models import ProtectedError
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import CreateView, DeleteView, ListView, UpdateView
+from django.views.generic import CreateView, DeleteView, UpdateView
 
 from .forms import AnaliticForm, SinteticForm
-from .models import Analitic, Sintetic, TypeAccount
+from .models import Analitic, Sintetic
 
 
 def indexview(request):
