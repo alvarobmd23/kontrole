@@ -7,6 +7,8 @@
   <h1>My profile</h1>
   <p>
     {{ object }}
+    {% csrf_token %}
+    {{ form.as_p }}
   </p>
   <a href="{% url 'accounts:logout' %}">Logout</a>
 {% endblock body %}

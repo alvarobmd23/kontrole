@@ -1,9 +1,14 @@
 
+from functools import wraps
 from typing import Any, Dict
 
-from django.db.models.query import QuerySet
-from django.shortcuts import render
+from django.contrib import messages
+from django.core.exceptions import PermissionDenied
+from django.db.models import ProtectedError
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils.safestring import mark_safe
+from django.utils.translation import gettext_lazy as _
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
 from .forms import AnaliticForm, SinteticForm
@@ -32,6 +37,8 @@ class Analitic_New(CreateView):
         analitic = form.save(commit=False)
         analitic.company = self.request.user.company
         analitic.save()
+        messages.success(
+            self.request, 'Conta Analítica adicionada com sucesso!', 'alert-success')
         return super(Analitic_New, self).form_valid(form)
 
 
@@ -42,6 +49,8 @@ class Analitic_Update(UpdateView):
     def get_form_kwargs(self):
         kwargs = super(Analitic_Update, self).get_form_kwargs()
         kwargs.update({'user': self.request.user})
+        messages.success(
+            self.request, 'Conta Analítica modificada com sucesso!', 'alert-success')
         return kwargs
 
 
@@ -67,6 +76,8 @@ class Sintetic_New(CreateView):
         sintetic = form.save(commit=False)
         sintetic.company = self.request.user.company
         sintetic.save()
+        messages.success(
+            self.request, 'Conta Sintética adicionada com sucesso!', 'alert-success')
         return super(Sintetic_New, self).form_valid(form)
 
 
@@ -77,6 +88,8 @@ class Sintetic_Update(UpdateView):
     def get_form_kwargs(self):
         kwargs = super(Sintetic_Update, self).get_form_kwargs()
         kwargs.update({'user': self.request.user})
+        messages.success(
+            self.request, 'Conta Sintética modificada com sucesso!', 'alert-success')
         return kwargs
 
 

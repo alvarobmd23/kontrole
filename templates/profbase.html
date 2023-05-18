@@ -62,9 +62,20 @@
         </div>
     </div>
 
-<!-- Conteúdo do nosso site, esse será definido nas páginas específicas -->
+<!-- Pop-up de Mensagens e avisos -->
     <div id="content" class="container">    
         {% block list_options %} {% endblock list_options %}
+        
+        {% if messages %}
+            {% for message in messages %}
+                <div id="message_container" class="alert alert-{{ message.tags }} border-0 w-25 p-1 m-2 float-end shadow" id="msg" role="alert">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+<!-- Conteúdo do nosso site, esse será definido nas páginas específicas -->       
+
         {% block body %} {% endblock body %}
         <br/>
     </div>
@@ -78,7 +89,14 @@
         </div>
     </div>
 
+<!-- Script para sumir com o pop-up de mensagens em 3 segundos -->
+<script>
+    var message_ele = document.getElementById("message_container");
 
+    setTimeout(function(){ 
+        message_ele.style.display = "none"; 
+    }, 3000);
+</script>
 
 </body>
 </html>
