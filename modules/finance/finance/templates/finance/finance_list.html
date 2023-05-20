@@ -1,0 +1,44 @@
+{% extends 'profbase.html' %}
+
+{% block title %}Kontrole{% endblock title %}
+
+{% block list_options %}
+
+    <div class="col bg-secondary">
+        <ul class="list-group list-group-horizontal justify-content-end">
+            <li class="list-group-item btn btn-light">
+            <a href="{% url 'finance:finance-new' %}">New</a>
+            </li>
+        </ul>            
+    </div>
+
+{% endblock list_options %}
+
+{% block body %}
+    <div class="col">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Data</th>
+                    <th scope="col">Documento</th>
+                    <th scope="col">N. Documento</th>
+                    <th scope="col">Valor</th>
+                    <th class="text-center" scope="col">Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for finance in object_list %}
+                <tr>
+                    <td>{{finance.date}}</td>
+                    <td>{{finance.document_type}}</td>
+                    <td>{{finance.n_doc}}</td>
+                    <td>{{finance.total_value}}</td>
+                    <td class="text-center"><a href="{% url 'finance:finance-update' finance.id %}"><i class="fas fa-edit text-primary"></i></a>
+                        <a href="{% url 'finance:finance-delete' finance.id %}"><i class="fas fa-trash-alt text-danger"></i></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock body %}

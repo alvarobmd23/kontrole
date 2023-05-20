@@ -1,0 +1,22 @@
+{% extends 'profbase.html' %}
+
+{% block title %}Kontrole{% endblock title %}
+
+{% block body %}
+    <div class="col">
+        <h1>
+            <span>Deletar Lançamento </span>
+            <span> 
+                {% if finance.date %} 
+                - &#40;{{finance.date}}&#41; {{finance.document_type}}&#58; {{finance.n_doc}} - {{finance.total_value}} 
+                {% endif %}
+            </span>
+        </h1>
+        <form method="post">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="btn btn-danger">Confirmar</button>
+        <a href="{% url 'finance:finance-list' %}" class="btn btn-primary">Voltar</a>
+        </form>
+    </div>
+{% endblock body %}

@@ -28,4 +28,6 @@ urlpatterns = [
          include('modules.finance.chart_of_accounts.urls', namespace='chart_of_accounts')),
     path('finance/document_type/',
          include('modules.finance.document_type.urls', namespace='document_type')),
+    path('finance/finance/',
+         include('modules.finance.finance.urls', namespace='finance')),
 ]

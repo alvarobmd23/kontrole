@@ -12,4 +12,4 @@ class Document_Type(models.Model):
         return reverse("document_type:document_type")
 
     def __str__(self):
-        return self.name
+        return self.document_type

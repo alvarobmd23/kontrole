@@ -1,11 +1,4 @@
-from typing import Any
-
-from django.contrib import auth, messages
-from django.contrib.auth.decorators import login_required
-from django.db.models.query import QuerySet
-from django.forms.models import BaseModelForm
-from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, ListView, UpdateView
 
