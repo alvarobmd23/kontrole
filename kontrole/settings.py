@@ -47,6 +47,8 @@ INSTALLED_APPS = [
 
     # Core Apps
     'core.accounts',
+    'core.companies',
+    'core.main',
 
     # Modules Apps
 
@@ -140,3 +142,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # https://docs.djangoproject.com/en/5.0/topics/auth/customizing/
 
 AUTH_USER_MODEL = 'accounts.AUser'
+
+# Authentication using an Email Address
+# https://djangocentral.com/authentication-using-an-email-address/
+
+AUTHENTICATION_BACKENDS = ['core.accounts.backends.EmailBackend']
