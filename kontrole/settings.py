@@ -51,6 +51,7 @@ INSTALLED_APPS = [
     'core.main',
 
     # Modules Apps
+    'modules.persons',
 
 
 ]
@@ -152,3 +153,13 @@ AUTH_USER_MODEL = 'accounts.AUser'
 # https://djangocentral.com/authentication-using-an-email-address/
 
 AUTHENTICATION_BACKENDS = ['core.accounts.backends.EmailBackend']
+
+# Definition of url before login
+# https://docs.djangoproject.com/en/5.0/ref/settings/#std-setting-LOGIN_REDIRECT_URL
+
+LOGIN_REDIRECT_URL = '/index'
+
+# Definition of url before logout
+# https://docs.djangoproject.com/en/5.0/ref/settings/#logout-redirect-url
+
+LOGOUT_REDIRECT_URL = '/#'
