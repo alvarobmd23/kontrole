@@ -1,17 +1,39 @@
 {% load static %}
 {% load fontawesome_6 %}
 <head>
+    <!-- Font Awesome - Django App -->
     {% fontawesome_6_static %}
+
+    <!-- Bootstrap 5 css - Static File -->
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+
+    <!-- My css - Static File -->
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
+
+    <!-- Favicon - Static File -->
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicon.png' %}" >
+    
     {% block css %}{% endblock css %}
+
     <title>{% block title %}{% endblock title %}</title>
 </head>
 <body>
+    <!-- Include NavBar in template -->
     {% include "includes/nav.html" %}
-     <div class="container pt-2">
-        {% block content %}{% endblock content %}
-     </div>
+
+    <div class="container pt-2">
+        <div class="row">
+            {% block content %}{% endblock content %}
+        </div>        
+    </div>
+
+    <!-- Bootstrap 5 js - Static File -->
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- My js - Static File -->
+    <script src="{% static 'js/main.js' %}"></script>
+
+
     {% block js %}{% endblock js %}
 </body>

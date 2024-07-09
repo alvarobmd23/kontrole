@@ -1,14 +1,14 @@
 {% load static %}
 <nav class="navbar navbar-expand-lg bg-dark border-bottom border-body" data-bs-theme="dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#"><img src={% static "images/white-logo.png" %} alt="logo" height="40"></a>
+        <a class="navbar-brand" href="/index"><img src={% static "images/white-logo.png" %} alt="logo" height="40"></a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Dashboard</a>
+                    <a class="nav-link active" aria-current="page" href="/index">Dashboard</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -17,7 +17,7 @@
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Registrations</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Payment Terms</a></li>
+                        <li><a class="dropdown-item" href="{% url 'persons:paymentTerms' %}">Payment Terms</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Reports</a></li>
                     </ul>
@@ -30,6 +30,7 @@
                         <li><a class="dropdown-item" href="#">Entrys</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Chart of Accounts</a></li>
+                        <li><a class="dropdown-item" href="#">Document Types</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Reports</a></li>
                     </ul>

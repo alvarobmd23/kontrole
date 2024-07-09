@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from core.companies.models import Company
@@ -165,8 +166,8 @@ class PersonSeller (models.Model):
     )
     sellerComission = models.DecimalField(
         _("sellerComission"),
-        max_digits=3,
-        decimal_places=1,
+        max_digits=4,
+        decimal_places=2,
         default=0
     )
     sellerObs = models.CharField(
@@ -248,19 +249,23 @@ class PaymentTerms(models.Model):
 
     def __str__(self):
         return self.paymentTermDescription
+    
+    def get_absolute_url(self):
+        return reverse_lazy('persons:paymentTerms_detail', kwargs={'pk': self.pk})
 
 
 class PaymentTermsDays(models.Model):
     paymentTerms = models.ForeignKey(
         PaymentTerms,
-        on_delete=models.CASCADE)
+        on_delete=models.CASCADE,
+        related_name='paymentterm')
     paymentTermsDay = models.PositiveSmallIntegerField(
         _("paymentTermsDay"),
         default=0
     )
     paymentTermsPercentage = models.DecimalField(
         _(""),
-        max_digits=4,
+        max_digits=5,
         decimal_places=2,
         default=0
     )
@@ -312,7 +317,7 @@ class PersonCustomer(models.Model):
     )
     customerFinDiscount = models.DecimalField(
         _("customerFinDiscount"),
-        max_digits=4,
+        max_digits=5,
         decimal_places=2,
         default=0
     )

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Terms - Kontrole by Arguo{% endblock title %}
+
+{% block content %}
+<div class="page-header bg-light">
+    <h2 class="text-dark"><i class="fa-solid fa-money-check-dollar"></i> Payment Terms</h2>
+</div>
+
+
+<div class="col"></div>
+<div class="col col-10 col-lg-6">
+
+    {% if object_list %}
+    <table class="table table-striped" style="z-index:999">
+        <thead>
+            <tr>
+                <th>Payment Term</th>
+                <th class="text-center">Options</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for object in object_list %}
+            <tr>
+                <td><a href="{{ object.get_absolute_url }}">{{ object.paymentTermDescription }}</a></td>
+                <td class="text-center">
+                    <a href="#"><i class="fas fa-edit text-primary"></i></a>
+                    <a href="#"><i class="fas fa-trash-alt text-danger"></i></a>
+                </td>
+            </tr>            
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+{% else %}
+
+    <p class="alert alert-warning">Sem lançamentos.</p>
+
+{% endif %}
+
+</div>
+<div class="col"></div>
+
+
+
+{% endblock content %}

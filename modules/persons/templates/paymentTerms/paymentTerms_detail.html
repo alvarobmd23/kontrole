@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Payment Terms - Kontrole by Arguo{% endblock title %}
+
+{% block content %}
+<div class="page-header bg-light">
+    <h2 class="text-dark float-start">
+        <i class="fa-solid fa-money-check-dollar"></i> Payment Terms - {{ object }}
+    </h2>
+    <span class="align-text-bottom float-end">
+        <a class="btn btn-danger" href="{% url 'persons:paymentTerms' %}"><i class="fa-solid fa-rotate-left"></i> Voltar</a>
+        <a class="btn btn-primary" href="#"><i class="fas fa-edit"></i> Editar</a>
+    </span>
+</div>
+
+<br/>
+<div class="col-sm-12">
+    <table class="table table-user-information">
+        <tbody>
+            <tr>
+                <th class="text-end">Created by</th>
+                <td class="text-start">{{ object.user_created }} on {{ object.date_created }}</td>
+                <th class="text-end">Last Update by</th>
+                <td class="text-start">{{ object.user_updated }} on {{ object.date_updated }}</td>               
+            </tr>
+        </tbody>
+    </table>
+</div>
+<div class="col"></div>
+<div class="col col-10 col-md-6">
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th class="text-center">Days for Payment</th>
+            <th class="text-center">Payment Percentage</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for obj in object.paymentterm.all %}
+            <tr>
+                <td class="text-center">{{ obj.paymentTermsDay }}</td>
+                <td class="text-center">{{ obj.paymentTermsPercentage }}%</td>
+            </tr>    
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+<div class="col"></div>
+
+
+{% endblock content %}
