@@ -1,0 +1,146 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Payment Terms - Kontrole by Arguo{% endblock title %}
+
+{% block css %}
+
+<link rel="stylesheet" href="{% static 'css/persons/paymentTerms.css' %}">
+
+{% endblock css %}
+
+{% block content %}
+
+    <div class="page-header bg-light pt-1 mb-2">
+        <h2 class="text-dark float-start">
+            <i class="fa-solid fa-money-check-dollar"></i>
+            {% if object %}
+                Edit Payment Term - {{ object }}      
+            {% else %}
+                Add - Payment Term
+            {% endif %}
+        </h2>
+
+    </div>
+
+    <div class="col"></div>
+    <div class="col col-10 col-md-6">
+        <form method="POST" novalidate>
+            {% csrf_token %}
+                <div class="form-row">
+                    <label>
+                        <span class="required">Title</span>
+                    </label>
+                    {{ form.paymentTermDescription }}
+                    {% for error in form.paymentTermDescription.errors %}
+                        <br/>
+                        <span style="color:red">{{ error }}</span>
+                    {% endfor %}
+                </div>
+
+                {{ formset.management_form }}
+                <div class="form-row">
+                    <div class="row pt-3">
+                        <h4>
+                            Payment Term's Percentage 
+                            <button type="button" id="add-item" class="btn btn-info btn-sm p-2 rounded-circle text-center">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </h4>
+
+                    </div>
+                    <div class="row">
+                        <span style="display: none;">
+                            {{ form.paymentTermsPercentageSum }}
+                        </span>
+                    </div>
+                </div>
+                <table id="paymentTerms-table" class="table table-hover table-responsive table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Days</th>
+                            <th>Percentage</th>
+                            <th class="text-center">Options</th>
+                        </tr>
+                    </thead>
+                    <tbody class="paymentTerms-tbody">
+                        {% for item_paymentTerms_form in formset %}
+                            {% for hidden in item_paymentTerms_form.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                            {{ item_paymentTerms_form.management_form }}
+                            <tr id="item-{{ forloop.counter0 }}" class="form-group">
+                                <td>
+                                    <div class="row">
+                                        <div class="col">{{ item_paymentTerms_form.paymentTermsDay }}</div>
+                                        <label class="col pt-2">days</label>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col">{{ item_paymentTerms_form.paymentTermsPercentage }}</div>
+                                        <span class="col pt-2">%</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="col text-center">
+                                        <span style="display: none;">{{ item_paymentTerms_form.DELETE }}</span>
+                                        <span id="{{ forloop.counter0 }}" class="btn btn-danger mt-1 ptDel" onclick="paymentTermsDayDeleteHidden(this)">
+                                            <i class="fas fa-trash-alt text-light"></i>
+                                        </span>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="row float-right">
+                    <div class="col-sm-12" style="margin-top: 10px;">
+                        <div class="form-inline buttons">
+                            <button type="submit" class="btn btn-success"><i class="fa-regular fa-circle-check"></i> Salvar</button>
+                            <span class="float-end">
+                                <a href="{% url 'persons:paymentTerms' %}" class="btn btn-danger">
+                                    <i class="fa-regular fa-circle-xmark"></i> Cancel
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+    <div class="col"></div>
+
+
+{% endblock content %}
+
+{% block js %}
+
+<script src="{% static 'js/persons/paymentTerms.js' %}"></script>
+
+
+<script type="text/html" id="item-paymentTerms">
+    <tr id="item-__prefix__" class="form-group">
+        <td>
+            <div class="row">
+                <div class="col">{{ formset.empty_form.paymentTermsDay }}</div>
+                <label class="col pt-2">days</label>
+            </div>
+        </td>
+        <td>
+            <div class="row">
+                <div class="col">{{ formset.empty_form.paymentTermsPercentage }}</div>
+                <span class="col pt-2">%</span>
+            </div>
+        </td>
+        <td>
+            <div class="col text-center">
+                <span style="display: none;">{{ formset.empty_form.DELETE }}</span>
+                <span id="__prefix__" class="btn btn-danger mt-1 ptDel" onclick="paymentTermsDayDeleteHidden(this)">
+                    <i class="fas fa-trash-alt text-light"></i>
+                </span>
+            </div>
+        </td>
+    </tr>
+</script>
+
+{% endblock js %}

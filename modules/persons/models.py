@@ -222,6 +222,12 @@ class PaymentTerms(models.Model):
         _("paymentTermDescription"),
         max_length=50
     )
+    paymentTermsPercentageSum = models.DecimalField(
+        _(""),
+        max_digits=5,
+        decimal_places=2,
+        default=0
+    )
     user_created = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
@@ -249,9 +255,10 @@ class PaymentTerms(models.Model):
 
     def __str__(self):
         return self.paymentTermDescription
-    
+
     def get_absolute_url(self):
-        return reverse_lazy('persons:paymentTerms_detail', kwargs={'pk': self.pk})
+        return reverse_lazy(
+            'persons:paymentTerms_detail', kwargs={'pk': self.pk})
 
 
 class PaymentTermsDays(models.Model):
@@ -269,27 +276,16 @@ class PaymentTermsDays(models.Model):
         decimal_places=2,
         default=0
     )
-    user_created = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='paymentTermsDays_user_created'
-    )
     date_created = models.DateTimeField(
         auto_now_add=True,
         blank=True,
         null=True
-    )
-    user_updated = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='paymentTermsDays_user_updated'
     )
     date_updated = models.DateTimeField(
         auto_now=True,
         blank=True,
         null=True
     )
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     @property
     def paymentTermsPercentageInPercentage(self):

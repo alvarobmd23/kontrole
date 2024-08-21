@@ -22,11 +22,29 @@
     <!-- Include NavBar in template -->
     {% include "includes/nav.html" %}
 
+    <!-- Pop-up de Mensagens e avisos -->
+    <div class="fixed-top" style="margin-top:60px">
+        <div class="container w-25 float-right">
+            <div class="row">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div id="message_container" class="alert alert-{{ message.tags }} border-0 p-1 m-2 shadow fade show" role="alert">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
     <div class="container pt-2">
         <div class="row">
             {% block content %}{% endblock content %}
         </div>        
     </div>
+
+    <!-- JQuery - Static File -->
+    <script src="{% static 'js/jquery-3.7.1.min.js' %}"></script>
 
     <!-- Bootstrap 5 js - Static File -->
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
@@ -34,6 +52,15 @@
     <!-- My js - Static File -->
     <script src="{% static 'js/main.js' %}"></script>
 
+    <!-- Script para sumir com o pop-up de mensagens em 3 segundos -->
+     
+    <script>
+        var message_ele = document.getElementById("message_container");
+        setTimeout(function(){ 
+            message_ele.style.display = "none"; 
+        }, 3000);
+    </script>
+    
 
     {% block js %}{% endblock js %}
 </body>

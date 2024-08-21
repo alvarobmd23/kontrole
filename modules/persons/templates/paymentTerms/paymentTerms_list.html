@@ -3,7 +3,7 @@
 {% block title %}Payment Terms - Kontrole by Arguo{% endblock title %}
 
 {% block content %}
-<div class="page-header bg-light">
+<div class="page-header bg-light pt-1 mb-2">
     <h2 class="text-dark"><i class="fa-solid fa-money-check-dollar"></i> Payment Terms</h2>
 </div>
 
@@ -12,7 +12,7 @@
 <div class="col col-10 col-lg-6">
 
     {% if object_list %}
-    <table class="table table-striped" style="z-index:999">
+    <table class="table table-hover table-responsive" style="z-index:999">
         <thead>
             <tr>
                 <th>Payment Term</th>
@@ -24,8 +24,8 @@
             <tr>
                 <td><a href="{{ object.get_absolute_url }}">{{ object.paymentTermDescription }}</a></td>
                 <td class="text-center">
-                    <a href="#"><i class="fas fa-edit text-primary"></i></a>
-                    <a href="#"><i class="fas fa-trash-alt text-danger"></i></a>
+                    <a href="{% url 'persons:paymentTerms_edit' object.pk %}"><i class="fas fa-edit text-primary"></i></a>
+                    <a href="{% url 'persons:paymentTerms_delete' object.pk %}"><i class="fas fa-trash-alt text-danger"></i></a>
                 </td>
             </tr>            
             {% endfor %}
@@ -33,15 +33,28 @@
 
     </table>
 
-{% else %}
+    {% else %}
 
-    <p class="alert alert-warning">Sem lançamentos.</p>
+        <p class="alert alert-warning">Sem lançamentos.</p>
 
-{% endif %}
+    {% endif %}
 
 </div>
 <div class="col"></div>
 
-
+<div style="bottom:50px; right:30px; position:fixed;">
+    <div class="btn-group dropup position-relative float-end">
+        <button type="button" class="btn btn-outline-primary btn-lg p-2 rounded-circle text-center" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-plus p-2"></i>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item btn btn-secondary" href="{% url 'persons:paymentTerms_add' %}">
+                    <i class="fa-solid fa-plus text-primary"></i> Payment Terms
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
 
 {% endblock content %}

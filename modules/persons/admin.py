@@ -32,3 +32,5 @@ class PaymentTermsAdmin(admin.ModelAdmin):
 
 
 admin.site.register(PaymentTerms, PaymentTermsAdmin)
+
+admin.site.register(PaymentTermsDays)

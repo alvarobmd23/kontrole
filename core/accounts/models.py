@@ -12,3 +12,4 @@ class AUser(AbstractUser):
         verbose_name=_("company"),
         on_delete=models.CASCADE
         )
+    hierarchy = models.PositiveIntegerField()

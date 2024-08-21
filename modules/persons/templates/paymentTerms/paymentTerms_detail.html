@@ -3,17 +3,20 @@
 {% block title %}Payment Terms - Kontrole by Arguo{% endblock title %}
 
 {% block content %}
-<div class="page-header bg-light">
+<div class="page-header bg-light pt-1 mb-2">
     <h2 class="text-dark float-start">
         <i class="fa-solid fa-money-check-dollar"></i> Payment Terms - {{ object }}
     </h2>
     <span class="align-text-bottom float-end">
-        <a class="btn btn-danger" href="{% url 'persons:paymentTerms' %}"><i class="fa-solid fa-rotate-left"></i> Voltar</a>
-        <a class="btn btn-primary" href="#"><i class="fas fa-edit"></i> Editar</a>
+        <a class="btn btn-danger" href="{% url 'persons:paymentTerms' %}">
+            <i class="fa-solid fa-rotate-left"></i> Return
+        </a>
+        <a class="btn btn-primary" href="{% url 'persons:paymentTerms_edit' object.pk %}">
+            <i class="fas fa-edit"></i> Edit
+        </a>
     </span>
 </div>
 
-<br/>
 <div class="col-sm-12">
     <table class="table table-user-information">
         <tbody>
