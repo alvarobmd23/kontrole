@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+
+{% block title %}Chart Of Accounts - Kontrole by Arguo{% endblock title %}
+
+{% block content %}
+<div class="page-header bg-light pt-1 mb-2">
+    <h2 class="text-dark"><i class="fa-solid fa-list-ol"></i> Chart Of Accounts</h2>
+</div>
+
+
+<div class="col"></div>
+<div class="col col-10 col-lg-8">
+
+    <table class="table table-hover table-responsive" style="z-index:999">
+        <tbody>
+                {% for id, account in accountobject %}
+                <tr class="accounts">
+                    <th>{{ account }}</th>
+                    <th></th>
+                </tr>
+                    {% for sintetic in sinteticobject %}
+                        {% if sintetic.accountsType == id %}
+                        <tr class="sintetics">
+                            <td>
+                                &nbsp;&nbsp;&nbsp;
+                                {{ sintetic.sinteticName }}
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'finances:sintetic_edit' sintetic.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
+                                <a onclick="return confirm('Are you sure you want to delete the account *{{ sintetic.sinteticName }}*?');" href="{% url 'finances:sintetic_delete' sintetic.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
+                            </td>
+                        </tr>
+                            {% for analitic in analiticobject %}
+                                {% if analitic.sinteticAccounts == sintetic %}
+                                <tr>
+                                    <td class="fst-italic">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        {{ analitic.analiticName }}
+                                    </td>
+                                    <td class="text-start">
+                                        <a href="{% url 'finances:analitic_edit' analitic.pk %}"><i class="fa-regular fa-pen-to-square text-primary"></i></a>
+                                        <a onclick="return confirm('Are you sure you want to delete the account *{{ analitic.analiticName }}*?');" href="{% url 'finances:analitic_delete' analitic.pk %}"><i class="fa-regular fa-trash-can text-danger"></i></a>
+                                    </td>
+                                </tr>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+<div class="col"></div>
+
+<div style="bottom:50px; right:30px; position:fixed;">
+    <div class="btn-group dropup position-relative float-end">
+        <button type="button" class="btn btn-outline-primary btn-lg p-2 rounded-circle text-center" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="fa-solid fa-plus p-2"></i>
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item btn btn-secondary" href="{% url 'finances:sintetic_add' %}">
+                    <i class="fa-solid fa-plus text-primary"></i> Sintetic Account
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item btn btn-secondary" href="{% url 'finances:analitic_add' %}">
+                    <i class="fa-solid fa-plus text-primary"></i> Analitic Account
+                </a>
+            </li>
+        </ul>
+    </div>
+</div>
+
+{% endblock content %}

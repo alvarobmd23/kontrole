@@ -4,6 +4,7 @@ from django.urls import reverse_lazy
 from django.utils.translation import gettext_lazy as _
 
 from core.companies.models import Company
+from modules.finances.models import AnaliticAccount
 
 User = settings.AUTH_USER_MODEL
 
@@ -125,27 +126,16 @@ class PersonContact (models.Model):
         blank=True,
         null=True
     )
-    user_created = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='personContact_user_created'
-    )
     date_created = models.DateTimeField(
         auto_now_add=True,
         blank=True,
         null=True
-    )
-    user_updated = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='personContact_user_updated'
     )
     date_updated = models.DateTimeField(
         auto_now=True,
         blank=True,
         null=True
     )
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ('pk',)
@@ -162,7 +152,7 @@ class PersonContact (models.Model):
 class PersonSeller (models.Model):
     sellerPerson = models.ForeignKey(
         Person,
-        on_delete=models.CASCADE
+        on_delete=models.PROTECT
     )
     sellerComission = models.DecimalField(
         _("sellerComission"),
@@ -251,7 +241,7 @@ class PaymentTerms(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ('pk',)
+        ordering = ('paymentTermDescription', 'pk',)
 
     def __str__(self):
         return self.paymentTermDescription
@@ -322,33 +312,27 @@ class PersonCustomer(models.Model):
         verbose_name=_("customerPaymentTerms"),
         on_delete=models.PROTECT
     )
+    customerAccount = models.ForeignKey(
+        AnaliticAccount,
+        on_delete=models.PROTECT,
+        related_name='customerAccount'
+    )
     customerObs = models.CharField(
         _("customerObs"),
         max_length=300,
         blank=True,
         null=True
     )
-    user_created = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='personCustomer_user_created'
-    )
     date_created = models.DateTimeField(
         auto_now_add=True,
         blank=True,
         null=True
-    )
-    user_updated = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='personCustomer_user_updated'
     )
     date_updated = models.DateTimeField(
         auto_now=True,
         blank=True,
         null=True
     )
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     @property
     def customerFinDiscountPercentage(self):
@@ -366,4 +350,61 @@ class PersonCustomer(models.Model):
             self.customerPerson,
             self.customerFinDiscountPercentage,
             self.customerPaymentTerms
+        )
+
+
+class PersonSupplier(models.Model):
+    supllierPerson = models.ForeignKey(
+        Person,
+        on_delete=models.CASCADE
+    )
+    supllierFinDiscount = models.DecimalField(
+        _("supllierFinDiscount"),
+        max_digits=5,
+        decimal_places=2,
+        default=0
+    )
+    supllierPaymentTerms = models.ForeignKey(
+        PaymentTerms,
+        verbose_name=_("supllierPaymentTerms"),
+        on_delete=models.PROTECT
+    )
+    supllierAccount = models.ForeignKey(
+        AnaliticAccount,
+        on_delete=models.PROTECT,
+        related_name='supllierAccount'
+    )
+    supllierObs = models.CharField(
+        _("supllierObs"),
+        max_length=300,
+        blank=True,
+        null=True
+    )
+    date_created = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+        null=True
+    )
+    date_updated = models.DateTimeField(
+        auto_now=True,
+        blank=True,
+        null=True
+    )
+
+    @property
+    def supllierFinDiscountPercentage(self):
+        return f"{self.supllierFinDiscount} %"
+
+    @property
+    def supllierFinDiscountCalculate(self):
+        return (self.supllierFinDiscount/100)
+
+    class Meta:
+        ordering = ('pk',)
+
+    def __str__(self):
+        return '{} - {} of Financial Discount - {}'.format(
+            self.supllierPerson,
+            self.supllierFinDiscountPercentage,
+            self.supllierPaymentTerms
         )

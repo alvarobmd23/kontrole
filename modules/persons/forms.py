@@ -41,13 +41,13 @@ class PaymentTermsDays_Form(forms.ModelForm):
         widgets = {
             'paymentTermsDay': NumberInput(attrs={
                 'class': 'form-control',
-                'style': 'max-width: 100px; min-width: 70px',
+                'style': 'max-width: 80px; min-width: 80px',
                 'placeholder': 'How much days to Pay'
             }),
             'paymentTermsPercentage': NumberInput(attrs={
                 'max': 100,
                 'class': 'form-control paymentTermsPercentageSum',
-                'style': 'max-width: 100px; min-width: 70px',
+                'style': 'max-width: 90px; min-width: 90px',
                 'placeholder': 'Percentage of value for the day option'
             }),
         }

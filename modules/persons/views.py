@@ -8,6 +8,8 @@ from django.views.generic import DeleteView
 from .forms import PaymentTerms_Form, PaymentTermsDays_Form
 from .models import PaymentTerms, PaymentTermsDays
 
+# Payment Terms Views
+
 
 def paymentTerms_list(request):
     template_name = 'paymentTerms/paymentTerms_list.html'
@@ -69,7 +71,7 @@ def paymentTerms_add(request):
                     prefix='main'
                 )
                 messages.warning(request,
-                                 'The total percentage needs to be 100%',
+                                 'The total percentage needs to be 100%!',
                                  'alert-warning'
                                  )
         else:
@@ -144,7 +146,7 @@ def paymentTerms_edit(request, pk):
                     prefix='main'
                 )
                 messages.warning(request,
-                                 'The total percentage needs to be 100%',
+                                 'The total percentage needs to be 100%!',
                                  'alert-warning'
                                  )
         else:
@@ -180,7 +182,12 @@ class PaymentTerms_Delete(DeleteView):
     def get(self, request, *args, **kwargs):
         context = messages.warning(
             request,
-            'Payment Term successfully deleted',
+            'Payment Term successfully deleted!',
             'alert-warning'
         )
         return self.delete(context, request, *args, **kwargs)
+
+
+# Persons Views
+
+

@@ -18,8 +18,9 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="#">Registrations</a></li>
+                        <li><a class="dropdown-item" href="#">Sellers</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url 'persons:paymentTerms' %}">Payment Terms</a></li>
+                        <li><a class="dropdown-item" href="{% url 'persons:paymentTerms' %}"><i class="fa-solid fa-money-check-dollar"></i> Payment Terms</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Reports</a></li>
                     </ul>
@@ -48,9 +49,12 @@
                         Finances
                     </a>
                     <ul class="dropdown-menu">
+                        <li><a class="dropdown-item" href="#">Bills</a></li>
+                        <li><a class="dropdown-item" href="#">Receivable</a></li>
+                        <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Entrys</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Chart of Accounts</a></li>
+                        <li><a class="dropdown-item" href="{% url 'finances:chartOfAccounts' %}"><i class="fa-solid fa-list-ol"></i> Chart of Accounts</a></li>
                         <li><a class="dropdown-item" href="#">Document Types</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Reports</a></li>

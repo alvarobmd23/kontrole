@@ -24,8 +24,8 @@
             <tr>
                 <td><a href="{{ object.get_absolute_url }}">{{ object.paymentTermDescription }}</a></td>
                 <td class="text-center">
-                    <a href="{% url 'persons:paymentTerms_edit' object.pk %}"><i class="fas fa-edit text-primary"></i></a>
-                    <a href="{% url 'persons:paymentTerms_delete' object.pk %}"><i class="fas fa-trash-alt text-danger"></i></a>
+                    <a href="{% url 'persons:paymentTerms_edit' object.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
+                    <a onclick="return confirm('Are you sure you want to delete the Payment Term *{{ object }}*?');" href="{% url 'persons:paymentTerms_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
                 </td>
             </tr>            
             {% endfor %}
