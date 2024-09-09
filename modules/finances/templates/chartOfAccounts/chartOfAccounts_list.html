@@ -50,26 +50,28 @@
     </table>
 
 </div>
-<div class="col"></div>
-
-<div style="bottom:50px; right:30px; position:fixed;">
-    <div class="btn-group dropup position-relative float-end">
-        <button type="button" class="btn btn-outline-primary btn-lg p-2 rounded-circle text-center" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="fa-solid fa-plus p-2"></i>
-        </button>
-        <ul class="dropdown-menu">
-            <li>
-                <a class="dropdown-item btn btn-secondary" href="{% url 'finances:sintetic_add' %}">
-                    <i class="fa-solid fa-plus text-primary"></i> Sintetic Account
-                </a>
-            </li>
-            <li>
-                <a class="dropdown-item btn btn-secondary" href="{% url 'finances:analitic_add' %}">
-                    <i class="fa-solid fa-plus text-primary"></i> Analitic Account
-                </a>
-            </li>
-        </ul>
+<div class="col">
+    <div style="bottom:30px; right:30px; position:fixed;">
+        <div class="btn-group dropup position-relative float-end">
+            <button type="button" class="btn btn-outline-primary btn-lg p-2 rounded-circle text-center" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-plus p-2"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item btn btn-secondary" href="{% url 'finances:sintetic_add' %}">
+                        <i class="fa-solid fa-plus text-primary"></i> Sintetic Account
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item btn btn-secondary" href="{% url 'finances:analitic_add' %}">
+                        <i class="fa-solid fa-plus text-primary"></i> Analitic Account
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </div>
+
+
 
 {% endblock content %}

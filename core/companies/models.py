@@ -1,3 +1,4 @@
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
@@ -8,6 +9,7 @@ class Company(models.Model):
         max_length=50,
         unique=True
         )
+    usersNumbers = models.PositiveIntegerField(validators=[MinValueValidator(1)])
 
     class Meta:
         ordering = ('nameCompany',)

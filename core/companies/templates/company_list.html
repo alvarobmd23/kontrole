@@ -1,10 +1,10 @@
 {% extends "base.html" %}
 
-{% block title %}Payment Terms - Kontrole by Arguo{% endblock title %}
+{% block title %}Companies - Kontrole by Arguo{% endblock title %}
 
 {% block content %}
 <div class="page-header bg-light pt-1 mb-2">
-    <h2 class="text-dark"><i class="fa-solid fa-money-check-dollar"></i> Payment Terms</h2>
+    <h2 class="text-dark"><i class="fa-solid fa-building"></i> Companies</h2>
 </div>
 
 
@@ -13,13 +13,21 @@
 
     {% if object_list %}
     <table class="table table-hover table-responsive" style="z-index:999">
+        <thead>
+            <tr>
+                <th>Company Name</th>
+                <th class="text-center">Max Users</th>
+                <th></th>
+            </tr>
+        </thead>
         <tbody>
             {% for object in object_list %}
             <tr>
-                <td><a href="{{ object.get_absolute_url }}">{{ object.paymentTermDescription }}</a></td>
+                <td>{{ object.nameCompany }}</td>
+                <td class="text-center">{{ object.usersNumbers }}</td>
                 <td class="text-center">
-                    <a href="{% url 'persons:paymentTerms_edit' object.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
-                    <a onclick="return confirm('Are you sure you want to delete the Payment Term *{{ object }}*?');" href="{% url 'persons:paymentTerms_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
+                    <a href="{% url 'company:company_edit' object.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
+                    <a onclick="return confirm('Are you sure you want to delete the Company *{{ object }}*?');" href="{% url 'company:company_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
                 </td>
             </tr>            
             {% endfor %}
@@ -42,8 +50,8 @@
             </button>
             <ul class="dropdown-menu">
                 <li>
-                    <a class="dropdown-item btn btn-secondary" href="{% url 'persons:paymentTerms_add' %}">
-                        <i class="fa-solid fa-plus text-primary"></i> Payment Terms
+                    <a class="dropdown-item btn btn-secondary" href="{% url 'company:company_add'%}">
+                        <i class="fa-solid fa-plus text-primary"></i> Company
                     </a>
                 </li>
             </ul>

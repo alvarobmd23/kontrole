@@ -1,0 +1,124 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}User - Kontrole by Arguo{% endblock title %}
+
+{% block content %}
+
+    <div class="page-header bg-light pt-1 mb-2">
+        <h2 class="text-dark float-start">
+            <i class="fa-solid fa-user-gear"></i>
+            {% if object %}
+                Edit - User
+                <br/>
+                {{ object }}      
+            {% else %}
+                Add - User
+            {% endif %}
+        </h2>
+
+    </div>
+
+    <div class="col"></div>
+    <div class="col col-10 col-md-8">
+        <form method="POST" novalidate>
+            {% csrf_token %}
+                <div class="form-row">
+                    <div class="row">
+                        <div class="form-group col-7">
+                            <label>
+                                <span class="required">UserName</span>
+                            </label>
+                            {{ form.username }}
+                            {% for error in form.username.errors %}
+                                <span style="color:red">{{ error }}</span>
+                            {% endfor %}
+                            <br/>
+                        </div>
+                        <div class="form-group col-5">
+                            <label>
+                                <span class="required">Company</span>
+                            </label>
+                            {{ form.company }}
+                            {% for error in form.company.errors %}
+                                <span style="color:red">{{ error }}</span>
+                            {% endfor %}
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="row">
+                        <div class="form-group col-12">
+                            <label>
+                                <span class="required">E-mail</span>
+                            </label>
+                            {{ form.email }}
+                            {% for error in form.email.errors %}
+                                <span style="color:red">{{ error }}</span>
+                            {% endfor %}
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="row">
+                        <div class="form-group col-6">
+                            <label>
+                                <span class="required">Password</span>
+                            </label>
+                            {{ form.password }}
+                            {% for error in form.password.errors %}
+                                <span style="color:red">{{ error }}</span>
+                            {% endfor %}
+                            <br/>
+                        </div>
+                        
+                        <div class="form-group col-6">
+                            <label>
+                                <span class="required">Confirm Password</span>
+                            </label>
+                            {{ form.confirm_password }}
+                            {% for error in form.confirm_password.errors %}
+                                <span style="color:red">{{ error }}</span>
+                            {% endfor %}
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="row">
+                        <div class="form-group col">
+                            <label>
+                                <span class="required">Hierarchy</span>
+                            </label>
+                            {{ form.hierarchy }}
+                            {% for error in form.hierarchy.errors %}
+                                <span style="color:red">{{ error }}</span>
+                            {% endfor %}
+                            <br/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row float-right">
+                    <div class="col-sm-12" style="margin-top: 10px;">
+                        <div class="form-inline buttons">
+                            <button type="submit" class="btn btn-success"><i class="fa-regular fa-circle-check"></i> Save</button>
+                            <span class="float-end">
+                                <a href="{% url 'user:users' %}" class="btn btn-danger">
+                                    <i class="fa-regular fa-circle-xmark"></i> Cancel
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+        </form>
+    </div>
+    <div class="col"></div>
+
+
+{% endblock content %}

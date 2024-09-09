@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}User - Kontrole by Arguo{% endblock title %}
+
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/table-filter.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="page-header bg-light pt-1 mb-2 d-flex justify-content-between">
+    <div>
+        <h2 class="text-dark"><i class="fa-solid fa-user-gear"></i> Users</h2>
+    </div>
+    
+    <div class="input-group pb-1" style="width: auto;">
+        <div class="form-outline d-flex align-items-center">
+            <input id="filterInput" type="search" class="form-control"/>
+            <div class="search-input ms-2 text-secondary">
+                <i id="searchIcon" class="fa-solid fa-magnifying-glass"></i>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="col"></div>
+<div class="col col-12 col-lg-8">
+
+    {% if object_list %}
+    <table class="table table-hover table-responsive" style="z-index:999">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>UserName</th>
+                <th>E-mail</th>
+                <th class="text-center">Hierarchy</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for object in object_list %}
+            <tr>
+                <td>{{ object.company }}</td>
+                <td>{{ object.username }}</td>
+                <td>{{ object.email }}</td>
+                <td class="text-center">
+                    {% if object.hierarchy == 1 %}
+                        admin
+                    {% else %}
+                        {% if object.hierarchy == 2 %}
+                            client
+                        {% else %}
+                            user
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    <a href="{% url 'user:user_edit' object.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
+                    <a onclick="return confirm('Are you sure you want to delete the User *{{ object }}*?');" href="{% url 'user:user_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
+                </td>
+            </tr>            
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+        <p class="alert alert-warning">No data on this screen.</p>
+
+    {% endif %}
+
+</div>
+<div class="col">
+    <div style="bottom:30px; right:30px; position:fixed;">
+        <div class="btn-group dropup position-relative float-end">
+            <button type="button" class="btn btn-outline-primary btn-lg p-2 rounded-circle text-center" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-plus p-2"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item btn btn-secondary" href="{% url 'user:user_add'%}">
+                        <i class="fa-solid fa-plus text-primary"></i> User
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+{% block js %}
+
+<script src="{% static 'js/table-filter.js' %}"></script>
+
+{% endblock js %}
