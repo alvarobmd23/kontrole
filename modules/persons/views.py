@@ -5,8 +5,11 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import DeleteView
 
-from .forms import PaymentTerms_Form, PaymentTermsDays_Form
-from .models import PaymentTerms, PaymentTermsDays
+from .forms import (PaymentTerms_Form, PaymentTermsDays_Form, Person_Form,
+                    PersonContact_Form, PersonCustomer_Form,
+                    PersonSupplier_Form)
+from .models import (PaymentTerms, PaymentTermsDays, Person, PersonContact,
+                     PersonCustomer, PersonSupplier)
 
 # Payment Terms Views
 
@@ -190,4 +193,73 @@ class PaymentTerms_Delete(DeleteView):
 
 # Persons Views
 
+def persons_list(request):
+    template_name = 'persons/persons_list.html'
+    object = Person.objects.all().filter(company=request.user.company)
+    context = {'object_list': object}
+    return render(request, template_name, context)
 
+
+def persons_add(request):
+    template_name = 'persons/persons_form.html'
+    persons_form = Person()
+    contact_form = inlineformset_factory(
+        Person,
+        PersonContact,
+        form=PersonContact_Form,
+        extra=0,
+        min_num=0,
+        validate_min=True,
+    )
+    if request.method == 'POST':
+        form = Person_Form(
+            request.user,
+            request.POST,
+            instance=persons_form,
+            prefix='main'
+        )
+        formset = contact_form(
+            request.POST,
+            instance=persons_form,
+            prefix='contact',
+            form_kwargs={'user': request.user}
+        )
+        if form.is_valid() and formset.is_valid():
+            form = form.save(commit=False)
+            form.company = request.user.company
+            form.user_created = request.user
+            form.user_updated = request.user
+            form = form.save()
+            formset = formset.save()
+            messages.success(
+                request,
+                'Person added successfully!',
+                'alert-success'
+            )
+            return HttpResponseRedirect(
+                reverse_lazy('persons:persons_list')
+            )
+        else:
+            form = Person_Form(
+                request.user,
+                instance=persons_form,
+                prefix='main'
+            )
+            messages.warning(
+                request,
+                'Invalid form',
+                'alert-warning'
+            )
+    else:
+        form = Person_Form(
+            request.user,
+            instance=persons_form,
+            prefix='main'
+        )
+        formset = contact_form(
+            instance=persons_form,
+            prefix='contact',
+            form_kwargs={'user': request.user}
+        )
+    context = {'form': form, 'formset': formset}
+    return render(request, template_name, context)

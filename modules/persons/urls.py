@@ -23,4 +23,11 @@ urlpatterns = [
      path('paymentTerms/delete/<int:pk>/',
           login_required(v.PaymentTerms_Delete.as_view()),
           name='paymentTerms_delete'),
+     # persons
+     path('persons/',
+          login_required(v.persons_list),
+          name='persons_list'),
+     path('persons/add/',
+          login_required(v.persons_add),
+          name='persons_add'),
 ]

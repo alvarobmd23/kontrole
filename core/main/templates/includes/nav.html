@@ -17,7 +17,7 @@
                         Persons
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="#">Registrations</a></li>
+                        <li><a class="dropdown-item" href="{% url 'persons:persons_list' %}">Registrations</a></li>
                         <li><a class="dropdown-item" href="#">Sellers</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'persons:paymentTerms' %}"><i class="fa-solid fa-money-check-dollar"></i> Payment Terms</a></li>
@@ -67,11 +67,11 @@
                     </a>
                     <ul class="dropdown-menu">
                         {% if user.hierarchy == 1 %}
-                        <li><a class="dropdown-item" href="{% url 'company:companies' %}">Companies</a></li>
-                        <li><a class="dropdown-item" href="{% url 'user:users' %}">Users</a></li>
+                        <li><a class="dropdown-item" href="{% url 'company:companies' %}"><i class="fa-solid fa-building"></i> Companies</a></li>
+                        <li><a class="dropdown-item" href="{% url 'user:users' %}"><i class="fa-solid fa-user-gear"></i> Users</a></li>
                         {% endif %}
                         {% if user.hierarchy == 2 %}
-                        <li><a class="dropdown-item" href="{% url 'user:clientusers' %}">Users</a></li>
+                        <li><a class="dropdown-item" href="{% url 'user:clientusers' %}"><i class="fa-solid fa-user-gear"></i> Users</a></li>
                         {% endif %}
                     </ul>
                 </li>
@@ -83,12 +83,12 @@
                         {{ user }} | {{ user.company }}
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end">
-                        <li><a class="dropdown-item" href="{% url 'user:useruser_edit' user.id %}">Change Password</a></li>
+                        <li><a class="dropdown-item" href="{% url 'user:useruser_edit' user.id %}"><i class="fa-solid fa-key"></i> Change Password</a></li>
                         {% if user.hierarchy == 2 %}
-                        <li><a class="dropdown-item" href="{% url 'company:clientcompany_edit' user.company.id %}">Company</a></li>
+                        <li><a class="dropdown-item" href="{% url 'company:clientcompany_edit' user.company.id %}"><i class="fa-solid fa-building"></i> Company</a></li>
                         {% endif %}
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url 'user:logout' %}">Logout</a></li>
+                        <li><a class="dropdown-item" href="{% url 'user:logout' %}"><i class="fa-solid fa-right-from-bracket"></i> Logout</a></li>
                     </ul>
                 </li>
             </ul>

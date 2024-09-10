@@ -149,64 +149,6 @@ class PersonContact (models.Model):
         )
 
 
-class PersonSeller (models.Model):
-    sellerPerson = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT
-    )
-    sellerComission = models.DecimalField(
-        _("sellerComission"),
-        max_digits=4,
-        decimal_places=2,
-        default=0
-    )
-    sellerObs = models.CharField(
-        _("sellerObs"),
-        max_length=300,
-        blank=True,
-        null=True
-    )
-    user_created = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='personSeller_user_created'
-    )
-    date_created = models.DateTimeField(
-        auto_now_add=True,
-        blank=True,
-        null=True
-    )
-    user_updated = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='personSeller_user_updated'
-    )
-    date_updated = models.DateTimeField(
-        auto_now=True,
-        blank=True,
-        null=True
-    )
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-
-    @property
-    def comissionInPercentage(self):
-        return f"{self.sellerComission} %"
-
-    @property
-    def comissionToCalculate(self):
-        return (self.sellerComission/100)
-
-    class Meta:
-        ordering = ('pk',)
-
-    def __str__(self):
-        return '{} - {} - {}'.format(
-            self.pk,
-            self.sellerPerson,
-            self.comissionInPercentage
-        )
-
-
 class PaymentTerms(models.Model):
     paymentTermDescription = models.CharField(
         _("paymentTermDescription"),
@@ -407,4 +349,62 @@ class PersonSupplier(models.Model):
             self.supllierPerson,
             self.supllierFinDiscountPercentage,
             self.supllierPaymentTerms
+        )
+
+
+class PersonSeller (models.Model):
+    sellerPerson = models.ForeignKey(
+        Person,
+        on_delete=models.PROTECT
+    )
+    sellerComission = models.DecimalField(
+        _("sellerComission"),
+        max_digits=4,
+        decimal_places=2,
+        default=0
+    )
+    sellerObs = models.CharField(
+        _("sellerObs"),
+        max_length=300,
+        blank=True,
+        null=True
+    )
+    user_created = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        related_name='personSeller_user_created'
+    )
+    date_created = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+        null=True
+    )
+    user_updated = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        related_name='personSeller_user_updated'
+    )
+    date_updated = models.DateTimeField(
+        auto_now=True,
+        blank=True,
+        null=True
+    )
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    @property
+    def comissionInPercentage(self):
+        return f"{self.sellerComission} %"
+
+    @property
+    def comissionToCalculate(self):
+        return (self.sellerComission/100)
+
+    class Meta:
+        ordering = ('pk',)
+
+    def __str__(self):
+        return '{} - {} - {}'.format(
+            self.pk,
+            self.sellerPerson,
+            self.comissionInPercentage
         )

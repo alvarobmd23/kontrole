@@ -19,8 +19,27 @@
                     <div class="container-fluid py-5 text-center">
                         <form method="post">
                             {% csrf_token %}
-                            {{ form.as_p }}
-                            <button type="submit">Login</button>
+                            <div class="form-row">
+                                <label>
+                                    <span class="required">Username:</span>
+                                </label>
+                                {{ form.username }}
+                                {% for error in form.username.errors %}
+                                    <span style="color:red">{{ error }}</span>
+                                {% endfor %}
+                            </div>
+                            <br/>
+                            <div class="form-row">
+                                <label>
+                                    <span class="required">Password:</span>
+                                </label>
+                                {{ form.password }}
+                                {% for error in form.password.errors %}
+                                    <span style="color:red">{{ error }}</span>
+                                {% endfor %}
+                            </div>    
+                            <br/>
+                            <button type="submit" class="btn btn-secondary">Login</button>
                         </form>
                     </div>
                 </div>
