@@ -109,8 +109,8 @@
                         {% endfor %}
                     </div>
                 </div>
-                <br/>
             </div>
+            <br/>
             <div class="form-row">
                 <label>
                     <span class="required">Obs</span>
@@ -120,30 +120,235 @@
                     <br/>
                     <span style="color:red">{{ error }}</span>
                 {% endfor %}
-                <br/>
             </div>
+            <br/>
+            <div id="card-contact" class="card pt-2">
+                <h4 class="px-2">Contacts
+                    <span class="float-end">
+                        {% if contactformset.total_form_count > 1 %}
+                            <button type="button" class="btn btn-success btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_contact" aria-expanded="false" aria-controls="open_contact">
+                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-danger btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_contact" aria-expanded="false" aria-controls="open_contact">
+                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                            </button>
+                        {% endif %}
+                    </span>
+                </h4>
+                <div class="collapse multi-collapse px-2" id="open_contact">
 
-            {{ formset.management_form }}
-            <div class="form-row">
-                <div class="row pt-3">
-                    <h4>
-                        Contact 
-                        <button type="button" id="add-item" class="btn btn-info btn-sm p-2 rounded-circle text-center">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
-                    </h4>
-
+                    {{ contactformset.management_form }}
+                    <table id="contact-table" class="table table-hover table-responsive table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Contact Type</th>
+                                <th>Contact</th>
+                                <th>Obs</th>
+                                <th class="text-center">
+                                    <div>
+                                        <button type="button" id="add-contactitem" class="btn btn-info btn-sm p-2 rounded-circle text-center">
+                                            <i class="fa-solid fa-plus"></i>
+                                        </button>
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="contact-tbody">
+                            {% for contactformset in contactformset %}
+                                {% for hidden in contactformset.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                                <tr id="contact-{{ forloop.counter0 }}" class="form-group">
+                                    <td>
+                                        {{ contactformset.contactType }}
+                                        {% for error in contactformset.contactType.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {{ contactformset.contactDescription }}
+                                        {% for error in contactformset.contactDescription.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {{ contactformset.contactObs }}
+                                        {% for error in contactformset.contactObs.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <div class="col text-center">
+                                            <span style="display: none;">{{ contactformset.DELETE }}</span>
+                                            <span id="{{ forloop.counter0 }}" class="btn btn-danger mt-1 ptDel" onclick="contactDeleteHidden(this)">
+                                                <i class="fas fa-trash-alt text-light"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> 
                 </div>
             </div>
-            {% for contact_form in formset %}
-                {{ contact_form.management_form }}  
-                    <div class="form-group">
-                        {{ contact_form.as_p }}
-                        {% for error in contact_form.errors %}
-                            <span style="color:red">{{ error }}</span>
-                        {% endfor %}
-                    </div>
-            {% endfor %}
+            <br/>
+            <div id="card-supplier" class="card pt-2">
+                <h4 class="px-2">Supplier
+                    <span class="float-end">
+                        {% if supplier_filled_forms %}
+                            <button type="button" class="btn btn-success btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_supplier" aria-expanded="false" aria-controls="open_supplier">
+                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-danger btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_supplier" aria-expanded="false" aria-controls="open_supplier">
+                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                            </button>
+                        {% endif %}
+                    </span>
+                </h4>
+                <div class="collapse multi-collapse px-2" id="open_supplier">
+                    {{ supplierformset.management_form }}
+                    <table id="supllier-table" class="table table-hover table-responsive table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Payment Terms</th>
+                                <th>Account</th>
+                                <th>Financial Discount</th>
+                                <th>Obs</th>
+                                {% if supplier_filled_forms %}
+                                <th class="text-center"></th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody class="supllier-tbody">
+                            {% for supplierformset in supplierformset %}
+                            {% for hidden in supplierformset.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                                <tr id="supplier-{{ forloop.counter0 }}" class="form-group">
+                                    <td>
+                                        {{ supplierformset.supllierPaymentTerms }}
+                                        {% for error in supplierformset.supllierPaymentTerms.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {{ supplierformset.supllierAccount }}
+                                        {% for error in supplierformset.supllierAccount.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">{{ supplierformset.supllierFinDiscount }}</div>
+                                            <span class="col pt-2">%</span>
+                                        </div>
+                                        {% for error in supplierformset.supllierFinDiscount.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {{ supplierformset.supllierObs }}
+                                        {% for error in supplierformset.supllierObs.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    {% if supplier_filled_forms %}
+                                    <td>
+                                        <div class="col text-center">
+                                            <span style="display: none;">{{ supplierformset.DELETE }}</span>
+                                            <span id="{{ forloop.counter0 }}" class="btn btn-danger mt-1 ptDel" onclick="supplierDeleteHidden(this)">
+                                                <i class="fas fa-trash-alt text-light"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> 
+                </div>
+            </div>
+            <br/>
+            <div id="card-customer" class="card pt-2">
+                <h4 class="px-2">Customer
+                    <span class="float-end">
+                        {% if customer_filled_forms %}
+                            <button type="button" class="btn btn-success btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_customer" aria-expanded="false" aria-controls="open_customer">
+                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                            </button>
+                        {% else %}
+                            <button type="button" class="btn btn-danger btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_customer" aria-expanded="false" aria-controls="open_customer">
+                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                            </button>
+                        {% endif %}
+                    </span>
+                </h4>
+                <div class="collapse multi-collapse px-2" id="open_customer">
+                    {{ customerformset.management_form }}
+                    <table id="customer-table" class="table table-hover table-responsive table-bordered">
+                        <thead>
+                            <tr>
+                                <th>Payment Terms</th>
+                                <th>Account</th>
+                                <th>Financial Discount</th>
+                                <th>Obs</th>
+                                {% if customer_filled_forms %}
+                                <th class="text-center"></th>
+                                {% endif %}
+                            </tr>
+                        </thead>
+                        <tbody class="supllier-tbody">
+                            {% for customerformset in customerformset %}
+                            {% for hidden in customerformset.hidden_fields %}
+                                {{ hidden }}
+                            {% endfor %}
+                                <tr id="customer-{{ forloop.counter0 }}" class="form-group">
+                                    <td>
+                                        {{ customerformset.customerPaymentTerms }}
+                                        {% for error in customerformset.customerPaymentTerms.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {{ customerformset.customerAccount }}
+                                        {% for error in customerformset.customerAccount.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        <div class="row">
+                                            <div class="col">{{ customerformset.customerFinDiscount }}</div>
+                                            <span class="col pt-2">%</span>
+                                        </div>
+                                        {% for error in customerformset.customerFinDiscount.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {{ customerformset.customerObs }}
+                                        {% for error in customerformset.customerObs.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    {% if customer_filled_forms %}
+                                    <td>
+                                        <div class="col text-center">
+                                            <span style="display: none;">{{ customerformset.DELETE }}</span>
+                                            <span id="{{ forloop.counter0 }}" class="btn btn-danger mt-1 ptDel" onclick="customerDeleteHidden(this)">
+                                                <i class="fas fa-trash-alt text-light"></i>
+                                            </span>
+                                        </div>
+                                    </td>
+                                    {% endif %}
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table> 
+                </div>
+            </div>
+            <br/>
             <div class="row float-right">
                 <div class="col-sm-12" style="margin-top: 10px;">
                     <div class="form-inline buttons">
@@ -162,3 +367,32 @@
 
 
 {% endblock content %}
+
+{% block js %}
+
+<script src="{% static 'js/persons/persons.js' %}"></script>
+
+
+<script type="text/html" id="item-contact">
+    <tr id="contact-__prefix__" class="form-group">
+        <td>
+            {{ contactformset.empty_form.contactType }}
+        </td>
+        <td>
+            {{ contactformset.empty_form.contactDescription }}
+        </td>
+        <td>
+            {{ contactformset.empty_form.contactObs }}
+         </td>
+        <td>
+            <div class="col text-center">
+                <span style="display: none;">{{ contactformset.empty_form.DELETE }}</span>
+                <span id="__prefix__" class="btn btn-danger mt-1 ptDel" onclick="contactDeleteHidden(this)">
+                    <i class="fas fa-trash-alt text-light"></i>
+                </span>
+            </div>
+        </td>
+    </tr>
+</script>
+
+{% endblock js %}

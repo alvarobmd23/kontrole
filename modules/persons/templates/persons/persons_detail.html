@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}Persons - Kontrole by Arguo{% endblock title %}
+
+{% block content %}
+<div class="row">
+    <div class="page-header bg-light pt-1 mb-2">
+        <h2 class="text-dark float-start">
+            <i class="fa-solid fa-user"></i> Person - {{ object.personName }}
+        </h2>
+        <span class="align-text-bottom float-end">
+            <a class="btn btn-danger" href="{% url 'persons:persons_list' %}">
+                <i class="fa-solid fa-rotate-left"></i> Return
+            </a>
+            <a class="btn btn-primary" href="{% url 'persons:persons_edit' object.pk %}">
+                <i class="fas fa-edit"></i> Edit
+            </a>
+        </span>
+    </div>
+</div>
+
+<div class="row">
+    <table class="table table-user-information">
+        <tbody>
+            <tr>
+                <th class="text-end">Created by</th>
+                <td class="text-start">{{ object.user_created }} on {{ object.date_created }}</td>
+                <th class="text-end">Last Update by</th>
+                <td class="text-start">{{ object.user_updated }} on {{ object.date_updated }}</td>               
+            </tr>
+        </tbody>
+    </table>
+</div>
+<br/>
+<div class="row card">
+    <table class="table table-user-information">
+        <tbody>
+            <tr>
+                <th class="text-end">Type</th>
+                <td class="text-start">{{ object.get_personType_display }}</td>
+                <th class="text-end">Name</th>
+                <td colspan="3" class="text-start">{{ object.personName }}</td>
+                <th class="text-end">TaxPayer Number</th>
+                <td class="text-start">{{ object.personTaxpayerRegistration }}</td>               
+            </tr>
+            <tr>
+                <th class="text-end">Address</th>
+                <td colspan="7" class="text-start">
+                    {% if object.personAddress %}
+                        {{ object.personAddress }}
+                    {% endif %}
+                </td>
+            </tr>
+            <tr>                    
+                <th class="text-end">City</th>
+                <td colspan="2" class="text-start">
+                    {% if object.personCity %}
+                        {{ object.personCity }}
+                    {% endif %}
+                </td>
+                <th class="text-end">State</th>
+                <td class="text-start">
+                    {% if object.personState %}
+                        {{ object.personState }}
+                    {% endif %}
+                </td>
+                <th class="text-end">Country</th>
+                <td colspan="2" class="text-start">
+                    {% if object.personCountry %}
+                        {{ object.personCountry }}
+                    {% endif %}
+                </td>                
+            </tr>
+            <tr>
+                <th class="text-end">Obs</th>
+                <td colspan="7" class="text-start">
+                    {% if object.personObs %}
+                        {{ object.personObs }}
+                    {% endif %}                    
+                </td>            
+            </tr>
+        </tbody>
+    </table>
+</div>
+<p></p>
+{% if object.contacts.all|length == 0 %}
+{% else %}
+<div class="row card">
+    <div class="text-center" style="border-bottom: 1px solid #d3d3d3"><h4 class="px-2">Contacts</h4></div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Contact Type</th>
+                <th>Description</th>
+                <th></th>
+                <th>Obs</th>
+                <th></th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ctobj in object.contacts.all %}
+                <tr>
+                    <td>{{ ctobj.get_contactType_display }}</td>
+                    <td colspan="2">{{ ctobj.contactDescription }}</td>
+                    <td colspan="3">{{ ctobj.contactObs }}</td>
+                </tr>    
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p></p>
+{% endif %}
+
+{% if object.sperson.all|length == 0 %}
+{% else %}
+<div class="row card">
+    <div class="text-center" style="border-bottom: 1px solid #d3d3d3"><h4 class="px-2">Supplier</h4></div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Payment Terms</th>
+                <th>Account</th>
+                <th class="text-center">Financial Discount</th>
+                <th>Obs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sobj in object.sperson.all %}
+                <tr>
+                    <td>{{ sobj.supllierPaymentTerms }}</td>
+                    <td>{{ sobj.supllierAccount }}</td>
+                    <td class="text-center">{{ sobj.supllierFinDiscountPercentage }}</td>
+                    <td>{{ sobj.supplierObs }}</td>
+                </tr>    
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p></p>
+{% endif %}
+
+{% if object.cperson.all|length == 0 %}
+{% else %}
+<div class="row card">
+    <div class="text-center" style="border-bottom: 1px solid #d3d3d3"><h4 class="px-2">Customer</h4></div>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Payment Terms</th>
+                <th>Account</th>
+                <th class="text-center">Financial Discount</th>
+                <th>Obs</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cobj in object.cperson.all %}
+                <tr>
+                    <td>{{ cobj.customerPaymentTerms }}</td>
+                    <td>{{ cobj.customerAccount }}</td>
+                    <td class="text-center">{{ cobj.customerFinDiscountPercentage }}</td>
+                    <td>{{ cobj.customerObs }}</td>
+                </tr>    
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<p></p>
+{% endif %}
+{% endblock content %}

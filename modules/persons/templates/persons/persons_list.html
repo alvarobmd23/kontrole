@@ -1,27 +1,76 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Person - Kontrole by Arguo{% endblock title %}
 
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/table-filter.css' %}">
+{% endblock css %}
+
 {% block content %}
-<div class="page-header bg-light pt-1 mb-2">
-    <h2 class="text-dark"><i class="fa-solid fa-users"></i> Persons</h2>
+<div class="page-header bg-light pt-1 mb-2 d-flex justify-content-between">
+    <div>
+        <h2 class="text-dark"><i class="fa-solid fa-users"></i> Persons</h2>
+    </div>
+    <div class="input-group pb-1" style="width: auto;">
+        <div class="form-outline d-flex align-items-center">
+            <input id="filterInput" type="search" class="form-control"/>
+            <div class="search-input ms-2 text-secondary">
+                <i id="searchIcon" class="fa-solid fa-magnifying-glass"></i>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <div class="col"></div>
-<div class="col col-10 col-lg-6">
+<div class="col col-10">
 
     {% if object_list %}
     <table class="table table-hover table-responsive" style="z-index:999">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Name</th>
+                <th>TaxPayer Number</th>
+                <th class="text-center">Contacts</th>
+                <th>Relationship</th>
+                <th></th>
+            </tr>
+        </thead>
         <tbody>
             {% for object in object_list %}
             <tr>
-                <td>{{ object.personType }}</td>
-                <td>{{ object.personName }}</td>
+                <td>{{ object.get_personType_display }}</td>
+                <td><a href="{{ object.get_absolute_url }}">{{ object.personName }}</a></td>
                 <td>{{ object.personTaxpayerRegistration }}</td>
                 <td class="text-center">
-                    <a href="#"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
-                    <a onclick="return confirm('Are you sure you want to delete the Person *{{ object }}*?');" href="#"><i class="fa-solid fa-trash-can text-danger"></i></a>
+                    {% if object.contacts.all|length == 0 %}
+                        <span style="display: none;">x-contact</span>
+                        <i class="fa-solid fa-circle-xmark text-danger"></i>
+                    {% else %}
+                        <span style="display: none;">v-contact</span>
+                        <i class="fa-solid fa-circle-check text-success"></i>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if object.cperson.all|length == 0 and object.sperson.all|length == 0 %}
+                    None
+                    {% else %}
+                        {% if object.sperson.all|length == 0 %}
+                        Customer
+                        {% else %}
+                            {% if object.cperson.all|length == 0 %}
+                            Supplier
+                            {% else %}
+                            Supplier | Customer
+                            {% endif %}
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td class="text-center">
+                    <a href="{% url 'persons:persons_edit' object.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
+                    <a onclick="return confirm('Are you sure you want to delete the Person *{{ object }}*?');" href="{% url 'persons:persons_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
                 </td>
             </tr>            
             {% endfor %}
@@ -52,6 +101,10 @@
         </div>
     </div>
 </div>
-
-
 {% endblock content %}
+
+{% block js %}
+
+<script src="{% static 'js/table-filter.js' %}"></script>
+
+{% endblock js %}

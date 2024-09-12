@@ -62,7 +62,7 @@
                         <tr>
                             <th>Days</th>
                             <th>Percentage</th>
-                            <th class="text-center">Options</th>
+                            <th class="text-center"></th>
                         </tr>
                     </thead>
                     <tbody class="paymentTerms-tbody">
@@ -76,12 +76,15 @@
                                     <div class="row">
                                         <div class="col">{{ item_paymentTerms_form.paymentTermsDay }}</div>
                                         <label class="col pt-2">days</label>
+
+                                            <span style="color:red">{{ formset_errors.error }}</span>
+
                                     </div>
                                 </td>
                                 <td>
                                     <div class="row">
                                         <div class="col">{{ item_paymentTerms_form.paymentTermsPercentage }}</div>
-                                        <span class="col pt-2">%</span>
+                                        <label class="col pt-2">%</label>
                                     </div>
                                 </td>
                                 <td>

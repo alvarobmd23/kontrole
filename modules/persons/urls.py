@@ -30,4 +30,13 @@ urlpatterns = [
      path('persons/add/',
           login_required(v.persons_add),
           name='persons_add'),
+     path('persons/<int:pk>/',
+          login_required(v.persons_detail),
+          name='persons_detail'),
+     path('persons/edit/<int:pk>/',
+          login_required(v.persons_edit),
+          name='persons_edit'),
+     path('persons/delete/<int:pk>/',
+          login_required(v.Persons_Delete.as_view()),
+          name='persons_delete'),
 ]

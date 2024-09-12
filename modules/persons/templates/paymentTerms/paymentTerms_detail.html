@@ -17,7 +17,7 @@
     </span>
 </div>
 
-<div class="col-sm-12">
+<div class="row">
     <table class="table table-user-information">
         <tbody>
             <tr>
@@ -29,26 +29,27 @@
         </tbody>
     </table>
 </div>
-<div class="col"></div>
-<div class="col col-10 col-md-6">
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th class="text-center">Days for Payment</th>
-            <th class="text-center">Payment Percentage</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for obj in object.paymentterm.all %}
-            <tr>
-                <td class="text-center">{{ obj.paymentTermsDay }}</td>
-                <td class="text-center">{{ obj.paymentTermsPercentage }}%</td>
-            </tr>    
-        {% endfor %}
-    </tbody>
-</table>
+<div class="row text-center">
+    <div class="col"></div>
+    <div class="col col-10 col-md-6">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">Days for Payment</th>
+                    <th class="text-center">Payment Percentage</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in object.paymentterm.all %}
+                    <tr>
+                        <td class="text-center">{{ obj.paymentTermsDay }}</td>
+                        <td class="text-center">{{ obj.paymentTermsPercentageInPercentage }}</td>
+                    </tr>    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col"></div>
 </div>
-<div class="col"></div>
-
 
 {% endblock content %}

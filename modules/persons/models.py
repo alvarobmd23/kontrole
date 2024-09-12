@@ -95,6 +95,10 @@ class Person (models.Model):
             self.personTaxpayerRegistration
         )
 
+    def get_absolute_url(self):
+        return reverse_lazy(
+            'persons:persons_detail', kwargs={'pk': self.pk})
+
 
 class PersonContact (models.Model):
     CONTACT_TYPE = (
@@ -105,7 +109,8 @@ class PersonContact (models.Model):
     )
     contactPerson = models.ForeignKey(
         Person,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='contacts'
     )
     contactType = models.CharField(
         _("contactType"),
@@ -241,7 +246,8 @@ class PaymentTermsDays(models.Model):
 class PersonCustomer(models.Model):
     customerPerson = models.ForeignKey(
         Person,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='cperson'
     )
     customerFinDiscount = models.DecimalField(
         _("customerFinDiscount"),
@@ -298,7 +304,8 @@ class PersonCustomer(models.Model):
 class PersonSupplier(models.Model):
     supllierPerson = models.ForeignKey(
         Person,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='sperson'
     )
     supllierFinDiscount = models.DecimalField(
         _("supllierFinDiscount"),

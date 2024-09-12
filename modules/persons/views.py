@@ -158,6 +158,11 @@ def paymentTerms_edit(request, pk):
                 instance=paymentTerms_form,
                 prefix='main'
             )
+            formset = days_paymentTerms(
+                instance=paymentTerms_form,
+                prefix='paymentTerms',
+                form_kwargs={'user': request.user}
+            )
             messages.warning(
                 request,
                 'Invalid form',
@@ -174,7 +179,12 @@ def paymentTerms_edit(request, pk):
             prefix='paymentTerms',
             form_kwargs={'user': request.user}
         )
-    context = {'form': form, 'formset': formset, 'object': paymentTerms_form}
+    context = {
+        'form': form,
+        'formset': formset,
+        'object': paymentTerms_form,
+        'formset_errors': formset.errors,
+    }
     return render(request, template_name, context)
 
 
@@ -200,6 +210,13 @@ def persons_list(request):
     return render(request, template_name, context)
 
 
+def persons_detail(request, pk):
+    template_name = 'persons/persons_detail.html'
+    obj = Person.objects.filter(company=request.user.company).get(pk=pk)
+    context = {'object': obj}
+    return render(request, template_name, context)
+
+
 def persons_add(request):
     template_name = 'persons/persons_form.html'
     persons_form = Person()
@@ -207,9 +224,29 @@ def persons_add(request):
         Person,
         PersonContact,
         form=PersonContact_Form,
-        extra=0,
+        extra=1,
         min_num=0,
         validate_min=True,
+    )
+    supplier_form = inlineformset_factory(
+        Person,
+        PersonSupplier,
+        form=PersonSupplier_Form,
+        extra=1,
+        min_num=0,
+        max_num=1,
+        validate_min=True,
+        validate_max=True,
+    )
+    customer_form = inlineformset_factory(
+        Person,
+        PersonCustomer,
+        form=PersonCustomer_Form,
+        extra=1,
+        min_num=0,
+        max_num=1,
+        validate_min=True,
+        validate_max=True,
     )
     if request.method == 'POST':
         form = Person_Form(
@@ -218,19 +255,38 @@ def persons_add(request):
             instance=persons_form,
             prefix='main'
         )
-        formset = contact_form(
+        contactformset = contact_form(
             request.POST,
             instance=persons_form,
             prefix='contact',
             form_kwargs={'user': request.user}
         )
-        if form.is_valid() and formset.is_valid():
+        supplierformset = supplier_form(
+            request.POST,
+            instance=persons_form,
+            prefix='supplier',
+            form_kwargs={'user': request.user}
+        )
+        customerformset = customer_form(
+            request.POST,
+            instance=persons_form,
+            prefix='customer',
+            form_kwargs={'user': request.user}
+        )
+        if (
+            form.is_valid() and
+            contactformset.is_valid() and
+            supplierformset.is_valid() and
+            customerformset.is_valid()
+        ):
             form = form.save(commit=False)
             form.company = request.user.company
             form.user_created = request.user
             form.user_updated = request.user
             form = form.save()
-            formset = formset.save()
+            contactformset = contactformset.save()
+            supplierformset = supplierformset.save()
+            customerformset = customerformset.save()
             messages.success(
                 request,
                 'Person added successfully!',
@@ -245,21 +301,207 @@ def persons_add(request):
                 instance=persons_form,
                 prefix='main'
             )
-            messages.warning(
-                request,
-                'Invalid form',
-                'alert-warning'
-            )
+            if any(contactformset.errors):
+                messages.warning(
+                    request,
+                    'Check contacts table!',
+                    'alert-warning'
+                )
+            if any(supplierformset.errors):
+                messages.warning(
+                    request,
+                    'Check supplier table!',
+                    'alert-warning'
+                )
+            if any(customerformset.errors):
+                messages.warning(
+                    request,
+                    'Check customer table!',
+                    'alert-warning'
+                )
     else:
         form = Person_Form(
             request.user,
             instance=persons_form,
             prefix='main'
         )
-        formset = contact_form(
+        contactformset = contact_form(
             instance=persons_form,
             prefix='contact',
             form_kwargs={'user': request.user}
         )
-    context = {'form': form, 'formset': formset}
+        supplierformset = supplier_form(
+            instance=persons_form,
+            prefix='supplier',
+            form_kwargs={'user': request.user}
+        )
+        customerformset = customer_form(
+            instance=persons_form,
+            prefix='customer',
+            form_kwargs={'user': request.user}
+        )
+    context = {
+        'form': form,
+        'contactformset': contactformset,
+        'supplierformset': supplierformset,
+        'customerformset': customerformset,
+    }
     return render(request, template_name, context)
+
+
+def persons_edit(request, pk):
+    template_name = 'persons/persons_form.html'
+    persons_form = Person.objects.filter(
+        company=request.user.company).get(pk=pk)
+    contact_form = inlineformset_factory(
+        Person,
+        PersonContact,
+        form=PersonContact_Form,
+        extra=1,
+        min_num=0,
+        validate_min=True,
+    )
+    supplier_form = inlineformset_factory(
+        Person,
+        PersonSupplier,
+        form=PersonSupplier_Form,
+        extra=1,
+        min_num=0,
+        max_num=1,
+        validate_min=True,
+        validate_max=True,
+    )
+    customer_form = inlineformset_factory(
+        Person,
+        PersonCustomer,
+        form=PersonCustomer_Form,
+        extra=1,
+        min_num=0,
+        max_num=1,
+        validate_min=True,
+        validate_max=True,
+    )
+    if request.method == 'POST':
+        form = Person_Form(
+            request.user,
+            request.POST,
+            instance=persons_form,
+            prefix='main'
+        )
+        contactformset = contact_form(
+            request.POST,
+            instance=persons_form,
+            prefix='contact',
+            form_kwargs={'user': request.user}
+        )
+        supplierformset = supplier_form(
+            request.POST,
+            instance=persons_form,
+            prefix='supplier',
+            form_kwargs={'user': request.user}
+        )
+        customerformset = customer_form(
+            request.POST,
+            instance=persons_form,
+            prefix='customer',
+            form_kwargs={'user': request.user}
+        )
+        if (
+            form.is_valid() and
+            contactformset.is_valid() and
+            supplierformset.is_valid() and
+            customerformset.is_valid()
+        ):
+            form = form.save(commit=False)
+            form.company = request.user.company
+            form.user_created = request.user
+            form.user_updated = request.user
+            form = form.save()
+            contactformset = contactformset.save()
+            supplierformset = supplierformset.save()
+            customerformset = customerformset.save()
+            messages.success(
+                request,
+                'Person edited successfully!',
+                'alert-success'
+            )
+            return HttpResponseRedirect(
+                reverse_lazy('persons:persons_list')
+            )
+        else:
+            form = Person_Form(
+                request.user,
+                instance=persons_form,
+                prefix='main'
+            )
+            if any(contactformset.errors):
+                messages.warning(
+                    request,
+                    'Check contacts table!',
+                    'alert-warning'
+                )
+            if any(supplierformset.errors):
+                messages.warning(
+                    request,
+                    'Check supplier table!',
+                    'alert-warning'
+                )
+            if any(customerformset.errors):
+                messages.warning(
+                    request,
+                    'Check customer table!',
+                    'alert-warning'
+                )
+    else:
+        form = Person_Form(
+            request.user,
+            instance=persons_form,
+            prefix='main'
+        )
+        contactformset = contact_form(
+            instance=persons_form,
+            prefix='contact',
+            form_kwargs={'user': request.user}
+        )
+        supplierformset = supplier_form(
+            instance=persons_form,
+            prefix='supplier',
+            form_kwargs={'user': request.user}
+        )
+        customerformset = customer_form(
+            instance=persons_form,
+            prefix='customer',
+            form_kwargs={'user': request.user}
+        )
+
+    def has_filled_forms(formset):
+        for form in formset:
+            if form.has_changed() and not form.empty_permitted:
+                return True
+        return False
+
+    supplier_filled_forms = has_filled_forms(supplierformset)
+    customer_filled_forms = has_filled_forms(customerformset)
+
+    context = {
+        'form': form,
+        'contactformset': contactformset,
+        'supplierformset': supplierformset,
+        'supplier_filled_forms': supplier_filled_forms,
+        'customerformset': customerformset,
+        'customer_filled_forms': customer_filled_forms,
+    }
+    return render(request, template_name, context)
+
+
+class Persons_Delete(DeleteView):
+    model = Person
+    success_url = reverse_lazy('persons:persons_list')
+
+    def get(self, request, *args, **kwargs):
+        context = messages.warning(
+            request,
+            'Person successfully deleted!',
+            'alert-warning'
+        )
+        return self.delete(context, request, *args, **kwargs)
