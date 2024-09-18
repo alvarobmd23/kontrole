@@ -30,14 +30,28 @@
     <form method="POST" novalidate>
         {% csrf_token %}
             <div class="form-row">
-                <label>
-                    <span class="required">Type</span>
-                </label>
-                {{ form.personType }}
-                {% for error in form.personType.errors %}
-                    <br/>
-                    <span style="color:red">{{ error }}</span>
-                {% endfor %}
+                <div class="row">
+                    <div class="col col-4">
+                        <label>
+                            <span class="required">Type</span>
+                        </label>
+                        {{ form.personType }}
+                        {% for error in form.personType.errors %}
+                            <br/>
+                            <span style="color:red">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    <div class="col col-8">
+                        <label>
+                            <span class="required">Nickname</span>
+                        </label>
+                        {{ form.personNickName }}
+                        {% for error in form.personNickName.errors %}
+                            <br/>
+                            <span style="color:red">{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                </div>
                 <br/>
             </div>
             <div class="form-row">
@@ -293,6 +307,7 @@
                                 <th>Payment Terms</th>
                                 <th>Account</th>
                                 <th>Financial Discount</th>
+                                <th>Seller</th>
                                 <th>Obs</th>
                                 {% if customer_filled_forms %}
                                 <th class="text-center"></th>
@@ -323,6 +338,12 @@
                                             <span class="col pt-2">%</span>
                                         </div>
                                         {% for error in customerformset.customerFinDiscount.errors %}
+                                            <span style="color:red">{{ error }}</span>
+                                        {% endfor %}
+                                    </td>
+                                    <td>
+                                        {{ customerformset.customerSeller }}
+                                        {% for error in customerformset.customerSeller.errors %}
                                             <span style="color:red">{{ error }}</span>
                                         {% endfor %}
                                     </td>

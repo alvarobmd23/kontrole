@@ -21,7 +21,7 @@ urlpatterns = [
      path('chartOfAccounts/sintetic/delete/<int:pk>/',
           login_required(v.Sintetic_delete.as_view()),
           name='sintetic_delete'),
-     # chartOfAccounts - Sintetic Accounts
+     # chartOfAccounts - Analitic Accounts
      path('chartOfAccounts/analiticAdd',
           login_required(v.Analitic_add.as_view()),
           name='analitic_add'),
@@ -31,4 +31,17 @@ urlpatterns = [
      path('chartOfAccounts/analitic/delete/<int:pk>/',
           login_required(v.Analitic_delete.as_view()),
           name='analitic_delete'),
+     # Document Type
+     path('documentType/',
+          login_required(v.documentType_list),
+          name='documentType_list'),
+     path('documentType/Add',
+          login_required(v.DocumentType_add.as_view()),
+          name='documentType_add'),
+     path('documentType/edit/<int:pk>/',
+          login_required(v.DocumentType_edit.as_view()),
+          name='documentType_edit'),
+     path('documentType/delete/<int:pk>/',
+          login_required(v.DocumentType_delete.as_view()),
+          name='documentType_delete'),
 ]

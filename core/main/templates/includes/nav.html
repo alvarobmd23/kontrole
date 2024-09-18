@@ -18,7 +18,7 @@
                     </a>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="{% url 'persons:persons_list' %}"><i class="fa-solid fa-users"></i> Registrations</a></li>
-                        <li><a class="dropdown-item" href="#">Sellers</a></li>
+                        <li><a class="dropdown-item" href="{% url 'persons:seller_list' %}"><i class="fa-solid fa-user-tag"></i> Sellers</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'persons:paymentTerms' %}"><i class="fa-solid fa-money-check-dollar"></i> Payment Terms</a></li>
                         <li><hr class="dropdown-divider"></li>
@@ -55,7 +55,7 @@
                         <li><a class="dropdown-item" href="#">Entrys</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="{% url 'finances:chartOfAccounts' %}"><i class="fa-solid fa-list-ol"></i> Chart of Accounts</a></li>
-                        <li><a class="dropdown-item" href="#">Document Types</a></li>
+                        <li><a class="dropdown-item" href="{% url 'finances:documentType_list' %}"><i class="fa-solid fa-paste"></i> Document Type</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Reports</a></li>
                     </ul>

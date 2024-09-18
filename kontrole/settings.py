@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     # Modules Apps
     'modules.persons',
     'modules.finances',
+    'modules.commercial',
 
 ]
 

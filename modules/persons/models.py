@@ -27,6 +27,12 @@ class Person (models.Model):
         blank=False,
         null=False
     )
+    personNickName = models.CharField(
+        _("personNickName"),
+        max_length=100,
+        blank=True,
+        null=True
+    )
     personTaxpayerRegistration = models.CharField(
         _("personTaxpayerRegistration"),
         max_length=30,
@@ -243,6 +249,51 @@ class PaymentTermsDays(models.Model):
         )
 
 
+class PersonSeller (models.Model):
+    sellerPerson = models.ForeignKey(
+        Person,
+        on_delete=models.CASCADE,
+        unique=True,
+        related_name='slperson'
+    )
+    sellerNickname = models.CharField(
+        _("sellerNickname"),
+        max_length=300,
+        unique=True,
+        blank=True,
+        null=True
+    )
+    user_created = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        related_name='seller_user_created'
+    )
+    date_created = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+        null=True
+    )
+    user_updated = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        related_name='seller_user_updated'
+    )
+    date_updated = models.DateTimeField(
+        auto_now=True,
+        blank=True,
+        null=True
+    )
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('pk',)
+
+    def __str__(self):
+        return '{}'.format(
+            self.sellerNickname
+        )
+
+
 class PersonCustomer(models.Model):
     customerPerson = models.ForeignKey(
         Person,
@@ -264,6 +315,13 @@ class PersonCustomer(models.Model):
         AnaliticAccount,
         on_delete=models.PROTECT,
         related_name='customerAccount'
+    )
+    customerSeller = models.ForeignKey(
+        PersonSeller,
+        on_delete=models.DO_NOTHING,
+        related_name='cseller',
+        blank=True,
+        null=True
     )
     customerObs = models.CharField(
         _("customerObs"),
@@ -358,60 +416,3 @@ class PersonSupplier(models.Model):
             self.supllierPaymentTerms
         )
 
-
-class PersonSeller (models.Model):
-    sellerPerson = models.ForeignKey(
-        Person,
-        on_delete=models.PROTECT
-    )
-    sellerComission = models.DecimalField(
-        _("sellerComission"),
-        max_digits=4,
-        decimal_places=2,
-        default=0
-    )
-    sellerObs = models.CharField(
-        _("sellerObs"),
-        max_length=300,
-        blank=True,
-        null=True
-    )
-    user_created = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='personSeller_user_created'
-    )
-    date_created = models.DateTimeField(
-        auto_now_add=True,
-        blank=True,
-        null=True
-    )
-    user_updated = models.ForeignKey(
-        User,
-        on_delete=models.DO_NOTHING,
-        related_name='personSeller_user_updated'
-    )
-    date_updated = models.DateTimeField(
-        auto_now=True,
-        blank=True,
-        null=True
-    )
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
-
-    @property
-    def comissionInPercentage(self):
-        return f"{self.sellerComission} %"
-
-    @property
-    def comissionToCalculate(self):
-        return (self.sellerComission/100)
-
-    class Meta:
-        ordering = ('pk',)
-
-    def __str__(self):
-        return '{} - {} - {}'.format(
-            self.pk,
-            self.sellerPerson,
-            self.comissionInPercentage
-        )

@@ -46,10 +46,10 @@
                 <td>{{ object.personTaxpayerRegistration }}</td>
                 <td class="text-center">
                     {% if object.contacts.all|length == 0 %}
-                        <span style="display: none;">x-contact</span>
+                        <span style="display: none;">without contact</span>
                         <i class="fa-solid fa-circle-xmark text-danger"></i>
                     {% else %}
-                        <span style="display: none;">v-contact</span>
+                        <span style="display: none;">with contact</span>
                         <i class="fa-solid fa-circle-check text-success"></i>
                     {% endif %}
                 </td>
@@ -58,6 +58,7 @@
                     None
                     {% else %}
                         {% if object.sperson.all|length == 0 %}
+                        <span style="display: none;">seller</span>
                         Customer
                         {% else %}
                             {% if object.cperson.all|length == 0 %}

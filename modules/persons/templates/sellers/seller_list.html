@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Sellers - Kontrole by Arguo{% endblock title %}
+
+{% block content %}
+<div class="page-header bg-light pt-1 mb-2">
+    <h2 class="text-dark"><i class="fa-solid fa-user-tag"></i> Sellers</h2>
+</div>
+
+
+<div class="col"></div>
+<div class="col col-10 col-lg-6">
+
+    {% if object_list %}
+    <table class="table table-hover table-responsive" style="z-index:999">
+        <tbody>
+            {% for object in object_list %}
+            <tr>
+                <td>{{ object.sellerNickname }}</td>
+                <td class="text-center">
+                    <a href="{% url 'persons:seller_edit' object.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
+                    <a onclick="return confirm('Are you sure you want to delete the Seller *{{ object }}*?');" href="{% url 'persons:seller_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
+                </td>
+            </tr>            
+            {% endfor %}
+        </tbody>
+
+    </table>
+
+    {% else %}
+
+        <p class="alert alert-warning">No data on this screen.</p>
+
+    {% endif %}
+
+</div>
+<div class="col">
+    <div style="bottom:30px; right:30px; position:fixed;">
+        <div class="btn-group dropup position-relative float-end">
+            <button type="button" class="btn btn-outline-primary btn-lg p-2 rounded-circle text-center" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-plus p-2"></i>
+            </button>
+            <ul class="dropdown-menu">
+                <li>
+                    <a class="dropdown-item btn btn-secondary" href="{% url 'persons:seller_add' %}">
+                        <i class="fa-solid fa-plus text-primary"></i> Seller
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}

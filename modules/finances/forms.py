@@ -1,7 +1,7 @@
 from django import forms
 from django.forms import DateInput, NumberInput, Select, TextInput
 
-from .models import AnaliticAccount, SinteticAccount
+from .models import AnaliticAccount, DocumentType, SinteticAccount
 
 # CHART OF ACCOUNTS
 
@@ -52,5 +52,22 @@ class AnaliticAccount_Form(forms.ModelForm):
                 'class': "form-control",
                 'style': "max-width: 300px",
                 'placeholder': "Analitic Name"
+            }),
+        }
+
+
+# DOCUMENT TYPE FORM
+class DocumentType_Form(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(DocumentType_Form, self).__init__(*args, **kwargs)
+
+    class Meta:
+        model = DocumentType
+        fields = ['documentTypeDescription']
+        widgets = {
+            'documentTypeDescription': TextInput(attrs={
+                'class': "form-control",
+                'style': "max-width: 300px",
+                'placeholder': "Document Type"
             }),
         }

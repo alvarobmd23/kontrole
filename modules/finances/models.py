@@ -29,6 +29,7 @@ class SinteticAccount (models.Model):
     sinteticName = models.CharField(
         _("sinteticName"),
         max_length=100,
+        unique=True,
         blank=False,
         null=False
     )
@@ -72,6 +73,7 @@ class AnaliticAccount (models.Model):
     analiticName = models.CharField(
         _("analiticName"),
         max_length=100,
+        unique=True,
         blank=False,
         null=False
     )
@@ -106,3 +108,45 @@ class AnaliticAccount (models.Model):
             self.sinteticAccounts.sinteticName,
             self.analiticName,
         )
+
+
+# DOCUMENT TYPE
+
+
+class DocumentType (models.Model):
+    documentTypeDescription = models.CharField(
+        _("documentTypeDescription"),
+        unique=True,
+        max_length=50
+    )
+    user_created = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        related_name='documentType_user_created'
+    )
+    date_created = models.DateTimeField(
+        auto_now_add=True,
+        blank=True,
+        null=True
+    )
+    user_updated = models.ForeignKey(
+        User,
+        on_delete=models.DO_NOTHING,
+        related_name='documentType_user_updated'
+    )
+    date_updated = models.DateTimeField(
+        auto_now=True,
+        blank=True,
+        null=True
+    )
+    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ('documentTypeDescription', 'pk',)
+
+    def __str__(self):
+        return self.documentTypeDescription
+
+    def get_absolute_url(self):
+        return reverse_lazy(
+            'finances:documentType_list', kwargs={'pk': self.pk})

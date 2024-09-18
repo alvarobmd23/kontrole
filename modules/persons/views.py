@@ -3,13 +3,13 @@ from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.views.generic import DeleteView
+from django.views.generic import CreateView, DeleteView, UpdateView
 
 from .forms import (PaymentTerms_Form, PaymentTermsDays_Form, Person_Form,
-                    PersonContact_Form, PersonCustomer_Form,
+                    PersonContact_Form, PersonCustomer_Form, PersonSeller_Form,
                     PersonSupplier_Form)
 from .models import (PaymentTerms, PaymentTermsDays, Person, PersonContact,
-                     PersonCustomer, PersonSupplier)
+                     PersonCustomer, PersonSeller, PersonSupplier)
 
 # Payment Terms Views
 
@@ -502,6 +502,68 @@ class Persons_Delete(DeleteView):
         context = messages.warning(
             request,
             'Person successfully deleted!',
+            'alert-warning'
+        )
+        return self.delete(context, request, *args, **kwargs)
+
+
+# Seller
+
+
+def seller_list(request):
+    template_name = 'sellers/seller_list.html'
+    object = PersonSeller.objects.all().filter(company=request.user.company)
+    context = {'object_list': object}
+    return render(request, template_name, context)
+
+
+class Seller_add(CreateView):
+    model = PersonSeller
+    form_class = PersonSeller_Form
+    template_name = 'sellers/seller_form.html'
+    success_url = reverse_lazy('persons:seller_list')
+
+    def form_valid(self, form):
+        form_instance = form.save(commit=False)
+        form_instance.company = self.request.user.company
+        form_instance.user_created = self.request.user
+        form_instance.user_updated = self.request.user
+        form_instance = form.save()
+        messages.success(
+            self.request,
+            'Seller successfully added!',
+            'alert-success'
+        )
+        return super(Seller_add, self).form_valid(form)
+
+
+class Seller_edit(UpdateView):
+    model = PersonSeller
+    form_class = PersonSeller_Form
+    template_name = 'sellers/seller_form.html'
+    success_url = reverse_lazy('persons:seller_list')
+
+    def form_valid(self, form):
+        form_instance = form.save(commit=False)
+        form_instance.company = self.request.user.company
+        form_instance.user_updated = self.request.user
+        form_instance = form.save()
+        messages.success(
+            self.request,
+            'Seller successfully edited!',
+            'alert-success'
+        )
+        return super(Seller_edit, self).form_valid(form)
+
+
+class Seller_Delete(DeleteView):
+    model = PersonSeller
+    success_url = reverse_lazy('persons:seller_list')
+
+    def get(self, request, *args, **kwargs):
+        context = messages.warning(
+            request,
+            'Seller successfully deleted!',
             'alert-warning'
         )
         return self.delete(context, request, *args, **kwargs)

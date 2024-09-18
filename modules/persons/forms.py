@@ -91,6 +91,7 @@ class PersonCustomer_Form(forms.ModelForm):
             'customerFinDiscount',
             'customerPaymentTerms',
             'customerAccount',
+            'customerSeller',
             'customerObs']
         widgets = {
             'customerFinDiscount': NumberInput(attrs={
@@ -107,6 +108,11 @@ class PersonCustomer_Form(forms.ModelForm):
                 'class': "form-control",
                 'style': "max-width: 300px",
                 'placeholder': "Account"
+            }),
+            'customerSeller': Select(attrs={
+                'class': "form-control",
+                'style': "max-width: 300px",
+                'placeholder': "Seller"
             }),
             'customerObs': TextInput(attrs={
                 'class': "form-control",
@@ -154,23 +160,22 @@ class PersonSupplier_Form(forms.ModelForm):
 
 
 class PersonSeller_Form(forms.ModelForm):
-    def __init__(self, user, *args, **kwargs):
-        self.user = user
+    def __init__(self, *args, **kwargs):
         super(PersonSeller_Form, self).__init__(*args, **kwargs)
 
     class Meta:
         model = PersonSeller
-        fields = ['sellerComission', 'sellerObs']
+        fields = ['sellerNickname', 'sellerPerson']
         widgets = {
-            'sellerComission': NumberInput(attrs={
-                'class': 'form-control',
-                'style': 'max-width: 80px; min-width: 80px',
-                'placeholder': 'How much days to Pay'
-            }),
-            'sellerObs': TextInput(attrs={
+            'sellerNickname': TextInput(attrs={
                 'class': "form-control",
-                'style': "max-width: 300px, height: 200px",
-                'placeholder': "Observation"
+                'style': "max-width: 300px",
+                'placeholder': "Nickname"
+            }),
+            'sellerPerson': Select(attrs={
+                'class': "form-control",
+                'style': "max-width: 300px",
+                'placeholder': "Person"
             }),
         }
 
@@ -185,6 +190,7 @@ class Person_Form(forms.ModelForm):
         fields = [
             'personType',
             'personName',
+            'personNickName',
             'personTaxpayerRegistration',
             'personAddress',
             'personCity',
@@ -201,6 +207,10 @@ class Person_Form(forms.ModelForm):
             'personName': TextInput(attrs={
                 'class': "form-control",
                 'placeholder': "Person Name"
+            }),
+            'personNickName': TextInput(attrs={
+                'class': "form-control",
+                'placeholder': "Person Nickname"
             }),
             'personTaxpayerRegistration': TextInput(attrs={
                 'class': "form-control",

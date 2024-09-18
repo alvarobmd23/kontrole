@@ -39,4 +39,17 @@ urlpatterns = [
      path('persons/delete/<int:pk>/',
           login_required(v.Persons_Delete.as_view()),
           name='persons_delete'),
+     # seller
+     path('sellers/',
+          login_required(v.seller_list),
+          name='seller_list'),
+     path('seller/add/',
+          login_required(v.Seller_add.as_view()),
+          name='seller_add'),
+     path('seller/edit/<int:pk>/',
+          login_required(v.Seller_edit.as_view()),
+          name='seller_edit'),
+     path('seller/delete/<int:pk>/',
+          login_required(v.Seller_Delete.as_view()),
+          name='seller_delete'),
 ]

@@ -5,8 +5,10 @@ from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, UpdateView
 
-from .forms import AnaliticAccount_Form, SinteticAccount_Form
-from .models import ACCOUNTS_TYPE, AnaliticAccount, SinteticAccount
+from .forms import (AnaliticAccount_Form, DocumentType_Form,
+                    SinteticAccount_Form)
+from .models import (ACCOUNTS_TYPE, AnaliticAccount, DocumentType,
+                     SinteticAccount)
 
 # CHART OF ACCOUNTS - LIST
 
@@ -164,3 +166,65 @@ class Analitic_delete(DeleteView):
     def get_queryset(self):
         company_user = self.request.user.company
         return AnaliticAccount.objects.filter(company=company_user)
+
+
+# Document Type
+
+
+def documentType_list(request):
+    template_name = 'documentType/documentType_list.html'
+    object = DocumentType.objects.all().filter(company=request.user.company)
+    context = {'object_list': object}
+    return render(request, template_name, context)
+
+
+class DocumentType_add(CreateView):
+    model = DocumentType
+    form_class = DocumentType_Form
+    template_name = 'documentType/documentType_form.html'
+    success_url = reverse_lazy('finances:documentType_list')
+
+    def form_valid(self, form):
+        form_instance = form.save(commit=False)
+        form_instance.company = self.request.user.company
+        form_instance.user_created = self.request.user
+        form_instance.user_updated = self.request.user
+        form_instance = form.save()
+        messages.success(
+            self.request,
+            'Document Type successfully added!',
+            'alert-success'
+        )
+        return super(DocumentType_add, self).form_valid(form)
+
+
+class DocumentType_edit(UpdateView):
+    model = DocumentType
+    form_class = DocumentType_Form
+    template_name = 'documentType/documentType_form.html'
+    success_url = reverse_lazy('finances:documentType_list')
+
+    def form_valid(self, form):
+        form_instance = form.save(commit=False)
+        form_instance.company = self.request.user.company
+        form_instance.user_updated = self.request.user
+        form_instance = form.save()
+        messages.success(
+            self.request,
+            'Document Type successfully edited!',
+            'alert-success'
+        )
+        return super(DocumentType_edit, self).form_valid(form)
+
+
+class DocumentType_delete(DeleteView):
+    model = DocumentType
+    success_url = reverse_lazy('finances:documentType_list')
+
+    def get(self, request, *args, **kwargs):
+        context = messages.warning(
+            request,
+            'Document Type successfully deleted!',
+            'alert-warning'
+        )
+        return self.delete(context, request, *args, **kwargs)
