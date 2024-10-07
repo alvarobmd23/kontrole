@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Entrys - Kontrole by Arguo{% endblock title %}
+
+{% block content %}
+<div class="page-header bg-light pt-1 mb-2">
+    <h2 class="text-dark float-start">
+        <i class="fa-solid fa-money-bill-transfer"></i> Entry - {{ object.entryDocumentType }}: {{ object.entryNumDocument }}
+    </h2>
+    <span class="align-text-bottom float-end">
+        <a class="btn btn-danger" href="{% url 'finances:entrys_list' %}">
+            <i class="fa-solid fa-rotate-left"></i> Return
+        </a>
+        <a class="btn btn-primary" href="{% url 'finances:entrys_edit' object.pk %}">
+            <i class="fas fa-edit"></i> Edit
+        </a>
+    </span>
+</div>
+
+<div class="row">
+    <table class="table table-user-information">
+        <tbody>
+            <tr>
+                <th class="text-end">Created by</th>
+                <td class="text-start">{{ object.user_created }} on {{ object.date_created }}</td>
+                <th class="text-end">Last Update by</th>
+                <td class="text-start">{{ object.user_updated }} on {{ object.date_updated }}</td>               
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="row">
+    <table class="table table-user-information">
+        <tbody>
+            <tr>
+                <td><b>Date: </b>{{ object.entryDate | date:"d/m/Y" }}</td>
+                <td><b>{{ object.entryDocumentType }} Document: </b>{{ object.entryNumDocument }}</td>
+                <td><b>Document Value: </b>{{ object.entryTotalValue }}</td>
+            </tr>
+            <tr>
+                <td colspan="3"><b>Descripition: </b>{{ object.entryDescription }}</td>
+            </tr>
+            <tr>
+                <td colspan="3"><b>Obs: </b>{{ object.entryObs }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<div class="row text-center">
+    <div class="col"></div>
+    <div class="col col-10">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center">Movement Type</th>
+                    <th class="text-center">Account</th>
+                    <th class="text-center">Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for obj in object.itensEntry.all %}
+                    <tr>
+                        <td class="text-center align-middle">{{ obj.get_itemEntryType_display }}</td>
+                        <td class="text-center align-middle">{{ obj.itemEntryAccount.sinteticAccounts }}/ <br> {{ obj.itemEntryAccount.analiticName }}</td>
+                        <td class="text-center align-middle">{{ obj.itemEntryValueRef }}</td>
+                    </tr>    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="col"></div>
+</div>
+
+{% endblock content %}

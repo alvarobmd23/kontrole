@@ -36,7 +36,7 @@ class AUser_Form(forms.ModelForm):
                 'placeholder': "Password"
             }),
             'company': Select(attrs={
-                'class': "form-control",
+                'class': "form-select",
                 'style': "max-width: 200px",
                 'placeholder': "Select the User's Company"
             }),

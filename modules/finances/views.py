@@ -1,14 +1,16 @@
 from typing import Any
 
 from django.contrib import messages
+from django.forms import inlineformset_factory
+from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DeleteView, UpdateView
 
-from .forms import (AnaliticAccount_Form, DocumentType_Form,
-                    SinteticAccount_Form)
-from .models import (ACCOUNTS_TYPE, AnaliticAccount, DocumentType,
-                     SinteticAccount)
+from .forms import (AnaliticAccount_Form, DocumentType_Form, Entry_Form,
+                    ItemEntry_Form, SinteticAccount_Form)
+from .models import (ACCOUNTS_TYPE, AnaliticAccount, DocumentType, Entry,
+                     EntryItem, SinteticAccount)
 
 # CHART OF ACCOUNTS - LIST
 
@@ -225,6 +227,209 @@ class DocumentType_delete(DeleteView):
         context = messages.warning(
             request,
             'Document Type successfully deleted!',
+            'alert-warning'
+        )
+        return self.delete(context, request, *args, **kwargs)
+
+
+# Entrys Views
+
+def entrys_list(request):
+    template_name = 'entrys/entry_list.html'
+    object = Entry.objects.all().filter(company=request.user.company)
+    context = {'object_list': object}
+    return render(request, template_name, context)
+
+
+def entrys_detail(request, pk):
+    template_name = 'entrys/entry_detail.html'
+    obj = Entry.objects.filter(company=request.user.company).get(pk=pk)
+    context = {'object': obj}
+    return render(request, template_name, context)
+
+
+def entrys_add(request):
+    template_name = 'entrys/entry_form.html'
+    entrys_form = Entry()
+    items_entry = inlineformset_factory(
+        Entry,
+        EntryItem,
+        form=ItemEntry_Form,
+        extra=0,
+        min_num=2,
+        validate_min=True,
+    )
+    if request.method == 'POST':
+        form = Entry_Form(
+            request.user,
+            request.POST,
+            instance=entrys_form,
+            prefix='main'
+        )
+        formset = items_entry(
+            request.POST,
+            instance=entrys_form,
+            prefix='itemEntry',
+            form_kwargs={'user': request.user}
+        )
+        if form.is_valid() and formset.is_valid():
+            form = form.save(commit=False)
+            if (form.entryTotalValue ==
+                    form.entryTotalCredit ==
+                    form.entryTotalDebit):
+                form.company = request.user.company
+                form.user_created = request.user
+                form.user_updated = request.user
+                form = form.save()
+                formset = formset.save()
+                messages.success(request,
+                                 'Document added successfully!',
+                                 'alert-success'
+                                 )
+                return HttpResponseRedirect(
+                    reverse_lazy('finances:entrys_list')
+                )
+            else:
+                if form.entryTotalCredit != form.entryTotalDebit:
+                    form = Entry_Form(request.user,
+                                      instance=entrys_form,
+                                      prefix='main')
+                    messages.warning(
+                        request,
+                        (
+                           'The total Credit amount must equal '
+                           'the total Debit amount!'
+                        ),
+                        'alert-warning')
+
+                else:
+                    form = Entry_Form(request.user,
+                                      instance=entrys_form,
+                                      prefix='main')
+                    messages.warning(
+                        request,
+                        (
+                            'The total Value must equal '
+                            'the total Credit amount and '
+                            'the total Debit amount!'
+                        ),
+                        'alert-warning'
+                    )
+        else:
+            form = Entry_Form(request.user,
+                              instance=entrys_form,
+                              prefix='main')
+            messages.warning(request, 'Invalid Form!', 'alert-warning')
+    else:
+        form = Entry_Form(
+            request.user,
+            instance=entrys_form,
+            prefix='main'
+        )
+        formset = items_entry(
+            instance=entrys_form,
+            prefix='itemEntry',
+            form_kwargs={'user': request.user}
+        )
+    context = {'form': form, 'formset': formset}
+    return render(request, template_name, context)
+
+
+def entrys_edit(request, pk):
+    template_name = 'entrys/entry_form.html'
+    entrys_form = Entry.objects.filter(
+        company=request.user.company).get(pk=pk)
+    items_entry = inlineformset_factory(
+        Entry,
+        EntryItem,
+        form=ItemEntry_Form,
+        extra=0,
+        min_num=2,
+        validate_min=True,
+    )
+    if request.method == 'POST':
+        form = Entry_Form(
+            request.user,
+            request.POST,
+            instance=entrys_form,
+            prefix='main'
+        )
+        formset = items_entry(
+            request.POST,
+            instance=entrys_form,
+            prefix='itemEntry',
+            form_kwargs={'user': request.user}
+        )
+        if form.is_valid() and formset.is_valid():
+            form = form.save(commit=False)
+            if (form.entryTotalValue ==
+                    form.entryTotalCredit ==
+                    form.entryTotalDebit):
+                form.company = request.user.company
+                form.user_updated = request.user
+                form = form.save()
+                formset = formset.save()
+                messages.success(request,
+                                 'Document edited successfully!',
+                                 'alert-success'
+                                 )
+                return HttpResponseRedirect(
+                    reverse_lazy('finances:entrys_list')
+                )
+            else:
+                if form.entryTotalCredit != form.entryTotalDebit:
+                    form = Entry_Form(request.user,
+                                      instance=entrys_form,
+                                      prefix='main')
+                    messages.warning(
+                        request,
+                        (
+                           'The total Credit amount must equal '
+                           'the total Debit amount!'
+                        ),
+                        'alert-warning')
+
+                else:
+                    form = Entry_Form(request.user,
+                                      instance=entrys_form,
+                                      prefix='main')
+                    messages.warning(
+                        request,
+                        (
+                            'The total Value must equal '
+                            'the total Credit amount and '
+                            'the total Debit amount!'
+                        ),
+                        'alert-warning'
+                    )
+        else:
+            form = Entry_Form(request.user,
+                              instance=entrys_form,
+                              prefix='main')
+            messages.warning(request, 'Invalid Form!', 'alert-warning')
+    else:
+        form = Entry_Form(
+            request.user,
+            instance=entrys_form,
+            prefix='main'
+        )
+        formset = items_entry(
+            instance=entrys_form,
+            prefix='itemEntry',
+            form_kwargs={'user': request.user}
+        )
+    context = {'form': form, 'formset': formset}
+    return render(request, template_name, context)
+
+
+class Entrys_delete(DeleteView):
+    model = Entry
+    success_url = reverse_lazy('finances:entrys_list')
+
+    def get(self, request, *args, **kwargs):
+        context = messages.warning(
+            request,
+            'Document successfully deleted!',
             'alert-warning'
         )
         return self.delete(context, request, *args, **kwargs)

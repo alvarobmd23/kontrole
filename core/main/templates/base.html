@@ -1,11 +1,13 @@
 {% load static %}
-{% load fontawesome_6 %}
 <head>
-    <!-- Font Awesome - Django App -->
-    {% fontawesome_6_static %}
+    <!-- Font Awesome - Static File -->
+    <link rel="stylesheet" href="{% static 'fontawesome660/css/all.min.css' %}">
 
     <!-- Bootstrap 5 css - Static File -->
-    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+
+    <!-- Select2 - Static File -->
+    <link rel="stylesheet" href="{% static 'select2/css/select2.min.css' %}">
 
     <!-- My css - Static File -->
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
@@ -23,12 +25,12 @@
     {% include "includes/nav.html" %}
 
     <!-- Pop-up de Mensagens e avisos -->
-    <div class="fixed-top" style="margin-top:60px">
-        <div class="container w-25 float-right">
+    <div class="fixed-top" style="margin-top:60px; margin-right:10px">
+        <div class="container w-25 float-end">
             <div class="row">
                 {% if messages %}
                     {% for message in messages %}
-                        <div id="message_container" class="alert alert-{{ message.tags }} border-0 p-1 m-2 shadow fade show" role="alert">
+                        <div id="message_container" class="alert {{ message.tags }} border-0 p-1 m-2 shadow fade show" role="alert">
                             {{ message }}
                         </div>
                     {% endfor %}
@@ -49,18 +51,25 @@
     <!-- Bootstrap 5 js - Static File -->
     <script src="{% static 'bootstrap/js/bootstrap.bundle.min.js' %}"></script>
 
+    <!-- Select2 - Static File -->
+    <script src="{% static 'select2/js/select2.min.js' %}"></script>
+
+    <!-- FontAwesome 6.6.0 js - Static File -->
+    <script src="{% static 'fontawesome660/js/all.min.js' %}"></script>
+
     <!-- My js - Static File -->
     <script src="{% static 'js/main.js' %}"></script>
 
-    <!-- Script para sumir com o pop-up de mensagens em 3 segundos -->
-     
+    <!-- Script to make message pop-ups disappear in 3 seconds -->
     <script>
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+        
         var message_ele = document.getElementById("message_container");
         setTimeout(function(){ 
             message_ele.style.display = "none"; 
         }, 3000);
     </script>
-    
 
     {% block js %}{% endblock js %}
 </body>

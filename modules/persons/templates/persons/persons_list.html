@@ -41,10 +41,10 @@
         <tbody>
             {% for object in object_list %}
             <tr>
-                <td>{{ object.get_personType_display }}</td>
-                <td><a href="{{ object.get_absolute_url }}">{{ object.personName }}</a></td>
-                <td>{{ object.personTaxpayerRegistration }}</td>
-                <td class="text-center">
+                <td class="align-middle">{{ object.get_personType_display }}</td>
+                <td class="align-middle"><a href="{{ object.get_absolute_url }}">{{ object.personName }}</a></td>
+                <td class="align-middle">{{ object.personTaxpayerRegistration }}</td>
+                <td class="text-center align-middle">
                     {% if object.contacts.all|length == 0 %}
                         <span style="display: none;">without contact</span>
                         <i class="fa-solid fa-circle-xmark text-danger"></i>
@@ -53,7 +53,7 @@
                         <i class="fa-solid fa-circle-check text-success"></i>
                     {% endif %}
                 </td>
-                <td>
+                <td class="align-middle">
                     {% if object.cperson.all|length == 0 and object.sperson.all|length == 0 %}
                     None
                     {% else %}
@@ -69,7 +69,7 @@
                         {% endif %}
                     {% endif %}
                 </td>
-                <td class="text-center">
+                <td class="text-center align-middle">
                     <a href="{% url 'persons:persons_edit' object.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
                     <a onclick="return confirm('Are you sure you want to delete the Person *{{ object }}*?');" href="{% url 'persons:persons_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
                 </td>

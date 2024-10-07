@@ -63,7 +63,7 @@ class PersonContact_Form(forms.ModelForm):
         fields = ['contactType', 'contactDescription', 'contactObs']
         widgets = {
             'contactType': Select(attrs={
-                'class': "form-control",
+                'class': "form-select",
                 'style': "max-width: 300px",
                 'placeholder': "Contact Type"
             }),
@@ -100,17 +100,17 @@ class PersonCustomer_Form(forms.ModelForm):
                 'placeholder': 'Financial Discount'
             }),
             'customerPaymentTerms': Select(attrs={
-                'class': "form-control",
+                'class': "form-select",
                 'style': "max-width: 300px",
                 'placeholder': "Payment Term"
             }),
             'customerAccount': Select(attrs={
-                'class': "form-control",
+                'class': "form-select",
                 'style': "max-width: 300px",
                 'placeholder': "Account"
             }),
             'customerSeller': Select(attrs={
-                'class': "form-control",
+                'class': "form-select",
                 'style': "max-width: 300px",
                 'placeholder': "Seller"
             }),
@@ -142,12 +142,12 @@ class PersonSupplier_Form(forms.ModelForm):
                 'placeholder': 'Financial Discount'
             }),
             'supllierPaymentTerms': Select(attrs={
-                'class': "form-control",
+                'class': "form-select",
                 'style': "max-width: 300px",
                 'placeholder': "Payment Term"
             }),
             'supllierAccount': Select(attrs={
-                'class': "form-control",
+                'class': "form-select",
                 'style': "max-width: 300px",
                 'placeholder': "Account"
             }),
@@ -173,7 +173,7 @@ class PersonSeller_Form(forms.ModelForm):
                 'placeholder': "Nickname"
             }),
             'sellerPerson': Select(attrs={
-                'class': "form-control",
+                'class': "form-select",
                 'style': "max-width: 300px",
                 'placeholder': "Person"
             }),
@@ -200,7 +200,7 @@ class Person_Form(forms.ModelForm):
         ]
         widgets = {
             'personType': Select(attrs={
-                'class': "form-control",
+                'class': "form-select",
                 'style': "max-width: 300px",
                 'placeholder': "Person Type"
             }),

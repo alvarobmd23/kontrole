@@ -42,8 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    # Support Apps
-    'fontawesome_6',
+    # Extension Apps
 
     # Core Apps
     'core.accounts',
