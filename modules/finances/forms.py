@@ -99,6 +99,7 @@ class Entry_Form(forms.ModelForm):
             ]
         widgets = {
             'entryDate': DateInput(attrs={
+                'type': "date",
                 'class': "form-control",
                 'style': "max-width: 200px",
             }),

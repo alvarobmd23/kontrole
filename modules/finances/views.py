@@ -3,9 +3,12 @@ from typing import Any
 from django.contrib import messages
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DeleteView, UpdateView
+
+from core.main.decorators import auditEntry
 
 from .forms import (AnaliticAccount_Form, DocumentType_Form, Entry_Form,
                     ItemEntry_Form, SinteticAccount_Form)
@@ -277,43 +280,56 @@ def entrys_add(request):
             if (form.entryTotalValue ==
                     form.entryTotalCredit ==
                     form.entryTotalDebit):
-                form.company = request.user.company
-                form.user_created = request.user
-                form.user_updated = request.user
-                form = form.save()
-                formset = formset.save()
-                messages.success(request,
-                                 'Document added successfully!',
-                                 'alert-success'
-                                 )
-                return HttpResponseRedirect(
-                    reverse_lazy('finances:entrys_list')
-                )
+                if form.entryDate > request.user.company.auditDate:
+                    form.company = request.user.company
+                    form.user_created = request.user
+                    form.user_updated = request.user
+                    form = form.save()
+                    formset = formset.save()
+                    messages.success(
+                        request,
+                        'Document added successfully!',
+                        'alert-success'
+                    )
+                    return HttpResponseRedirect(
+                        reverse_lazy('finances:entrys_list')
+                    )
+                else:
+                    form = Entry_Form(request.user,
+                                      instance=entrys_form,
+                                      prefix='main')
+                    messages.error(
+                        request,
+                        (
+                           'The date must be greater '
+                           'than the date of the last audit!'
+                        ),
+                        'alert-danger')
             else:
                 if form.entryTotalCredit != form.entryTotalDebit:
                     form = Entry_Form(request.user,
                                       instance=entrys_form,
                                       prefix='main')
-                    messages.warning(
+                    messages.error(
                         request,
                         (
                            'The total Credit amount must equal '
                            'the total Debit amount!'
                         ),
-                        'alert-warning')
+                        'alert-danger')
 
                 else:
                     form = Entry_Form(request.user,
                                       instance=entrys_form,
                                       prefix='main')
-                    messages.warning(
+                    messages.error(
                         request,
                         (
                             'The total Value must equal '
                             'the total Credit amount and '
                             'the total Debit amount!'
                         ),
-                        'alert-warning'
+                        'alert-danger'
                     )
         else:
             form = Entry_Form(request.user,
@@ -335,6 +351,7 @@ def entrys_add(request):
     return render(request, template_name, context)
 
 
+@auditEntry
 def entrys_edit(request, pk):
     template_name = 'entrys/entry_form.html'
     entrys_form = Entry.objects.filter(
@@ -365,17 +382,30 @@ def entrys_edit(request, pk):
             if (form.entryTotalValue ==
                     form.entryTotalCredit ==
                     form.entryTotalDebit):
-                form.company = request.user.company
-                form.user_updated = request.user
-                form = form.save()
-                formset = formset.save()
-                messages.success(request,
-                                 'Document edited successfully!',
-                                 'alert-success'
-                                 )
-                return HttpResponseRedirect(
-                    reverse_lazy('finances:entrys_list')
-                )
+                if form.entryDate > request.user.company.auditDate:
+                    form.company = request.user.company
+                    form.user_updated = request.user
+                    form = form.save()
+                    formset = formset.save()
+                    messages.success(
+                        request,
+                        'Document edited successfully!',
+                        'alert-success'
+                    )
+                    return HttpResponseRedirect(
+                        reverse_lazy('finances:entrys_list')
+                    )
+                else:
+                    form = Entry_Form(request.user,
+                                      instance=entrys_form,
+                                      prefix='main')
+                    messages.error(
+                        request,
+                        (
+                           'The date must be greater '
+                           'than the date of the last audit!'
+                        ),
+                        'alert-danger')
             else:
                 if form.entryTotalCredit != form.entryTotalDebit:
                     form = Entry_Form(request.user,
@@ -427,6 +457,20 @@ class Entrys_delete(DeleteView):
     success_url = reverse_lazy('finances:entrys_list')
 
     def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        auditDate = request.user.company.auditDate
+
+        if self.object.entryDate <= auditDate:
+            messages.error(
+                request,
+                (
+                    'Error deleting this record, '
+                    'its date is less than the last audit date!'
+                ),
+                'alert-danger'
+            )
+            return redirect('finances:entrys_list')
+
         context = messages.warning(
             request,
             'Document successfully deleted!',

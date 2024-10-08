@@ -27,7 +27,16 @@
                         <span style="color:red">{{ error }}</span>
                     {% endfor %}
                 </div>
-
+                <br/>
+                <div class="form-row">
+                    <label>
+                        <span class="required">Audit Date</span>
+                    </label>
+                    {{ form.auditDate }}
+                    {% for error in form.auditDate.errors %}
+                        <span style="color:red">{{ error }}</span>
+                    {% endfor %}
+                </div>
                 <div class="row float-right">
                     <div class="col-sm-12" style="margin-top: 10px;">
                         <div class="form-inline buttons">

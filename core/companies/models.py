@@ -9,7 +9,13 @@ class Company(models.Model):
         max_length=50,
         unique=True
         )
-    usersNumbers = models.PositiveIntegerField(validators=[MinValueValidator(1)])
+    usersNumbers = models.PositiveIntegerField(
+        validators=[MinValueValidator(1)]
+        )
+    auditDate = models.DateField(
+        blank=True,
+        null=True
+    )
 
     class Meta:
         ordering = ('nameCompany',)
