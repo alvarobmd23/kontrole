@@ -33,6 +33,9 @@ class SinteticAccount (models.Model):
         blank=False,
         null=False
     )
+    locked = models.BooleanField(
+        default=False
+    )
     user_created = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
@@ -77,6 +80,12 @@ class AnaliticAccount (models.Model):
         blank=False,
         null=False
     )
+    active = models.BooleanField(
+        default=True
+    )
+    locked = models.BooleanField(
+        default=False
+    )
     user_created = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
@@ -119,6 +128,12 @@ class DocumentType (models.Model):
         unique=True,
         max_length=50
     )
+    active = models.BooleanField(
+        default=True
+    )
+    locked = models.BooleanField(
+        default=False
+    )
     user_created = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
@@ -156,7 +171,7 @@ class DocumentType (models.Model):
 
 
 class Entry (models.Model):
-    entryDate = models.DateField()
+    date = models.DateField()
     entryDocumentType = models.ForeignKey(
         DocumentType,
         on_delete=models.PROTECT
@@ -220,14 +235,14 @@ class Entry (models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ('entryDate',)
+        ordering = ('-date',)
 
     def get_absolute_url(self):
         return reverse_lazy('finances:entrys_detail', kwargs={'pk': self.pk})
 
     def __str__(self):
         return '{} - {} {} - {}'.format(
-            self.entryDate.strftime('%d/%m/%Y'),
+            self.date.strftime('%d/%m/%Y'),
             self.entryDocumentType,
             self.entryNumDocument,
             self.entryDescription,
@@ -235,13 +250,13 @@ class Entry (models.Model):
 
     def itemRef(self):
         return '{} - {} {}'.format(
-            self.entryDate.strftime('%d/%m/%Y'),
+            self.date.strftime('%d/%m/%Y'),
             self.entryDocumentType,
             self.entryNumDocument,
         )
 
     def date_formated(self):
-        return self.entryDate.strftime('%d/%m/%Y')
+        return self.date.strftime('%d/%m/%Y')
 
 
 class EntryItem (models.Model):

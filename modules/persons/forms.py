@@ -1,5 +1,5 @@
 from django import forms
-from django.forms import NumberInput, Select, TextInput
+from django.forms import CheckboxInput, NumberInput, Select, TextInput
 
 from .models import (PaymentTerms, PaymentTermsDays, Person, PersonContact,
                      PersonCustomer, PersonSeller, PersonSupplier)
@@ -13,7 +13,12 @@ class PaymentTerms_Form(forms.ModelForm):
 
     class Meta:
         model = PaymentTerms
-        fields = ['paymentTermDescription', 'paymentTermsPercentageSum']
+        fields = [
+            'paymentTermDescription',
+            'paymentTermsPercentageSum',
+            'locked',
+            'active'
+        ]
         widgets = {
             'paymentTermDescription': TextInput(attrs={
                 'class': "form-control",
@@ -26,6 +31,12 @@ class PaymentTerms_Form(forms.ModelForm):
                 'style': 'max-width: 125px;',
                 'placeholder': 'Payment Term Percentage Sum',
                 'readonly': True
+            }),
+            'locked': CheckboxInput(attrs={
+                'class': "form-check-input"
+            }),
+            'active': CheckboxInput(attrs={
+                'class': "form-check-input"
             }),
         }
 
@@ -160,12 +171,18 @@ class PersonSupplier_Form(forms.ModelForm):
 
 
 class PersonSeller_Form(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
+
+    def __init__(self, user, *args, **kwargs):
+        self.user = user
         super(PersonSeller_Form, self).__init__(*args, **kwargs)
+        self.fields['sellerPerson'].queryset = (
+            Person.objects.filter(company=user.company, active=True).
+            order_by('personName')
+        )
 
     class Meta:
         model = PersonSeller
-        fields = ['sellerNickname', 'sellerPerson']
+        fields = ['sellerNickname', 'sellerPerson', 'locked', 'active']
         widgets = {
             'sellerNickname': TextInput(attrs={
                 'class': "form-control",
@@ -177,11 +194,17 @@ class PersonSeller_Form(forms.ModelForm):
                 'style': "max-width: 300px",
                 'placeholder': "Person"
             }),
+            'locked': CheckboxInput(attrs={
+                'class': "form-check-input"
+            }),
+            'active': CheckboxInput(attrs={
+                'class': "form-check-input"
+            }),
         }
 
 
 class Person_Form(forms.ModelForm):
-    def __init__(self, user, *args, **kwargs):
+    def __init__(self, user=None, *args, **kwargs):
         self.user = user
         super(Person_Form, self).__init__(*args, **kwargs)
 
@@ -196,7 +219,9 @@ class Person_Form(forms.ModelForm):
             'personCity',
             'personState',
             'personCountry',
-            'personObs'
+            'personObs',
+            'locked',
+            'active'
         ]
         widgets = {
             'personType': Select(attrs={
@@ -236,5 +261,11 @@ class Person_Form(forms.ModelForm):
             'personObs': TextInput(attrs={
                 'class': "form-control",
                 'placeholder': "Observation"
+            }),
+            'locked': CheckboxInput(attrs={
+                'class': "form-check-input"
+            }),
+            'active': CheckboxInput(attrs={
+                'class': "form-check-input"
             }),
         }

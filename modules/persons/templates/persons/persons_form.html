@@ -135,17 +135,42 @@
                     <span style="color:red">{{ error }}</span>
                 {% endfor %}
             </div>
+            {% if user.hierarchy == 3 %}
+            {% else %}
+                <br/>
+                <div class="form-row align-center" style="display: flex;">
+                    <span class="pe-2" >Locked:</span>
+                    <div class="form-check form-switch">{{ form.locked }}</div>
+                    {% for error in form.locked.errors %}
+                        <br/>
+                        <span style="color:red">{{ error }}</span>
+                    {% endfor %}
+                </div>
+                {% if object %}
+                    <br/>
+                    <div class="form-row align-center" style="display: flex;">
+                        <span class="pe-2" >Active:</span>
+                        <div class="form-check form-switch">{{ form.active }}</div>
+                        {% for error in form.active.errors %}
+                            <br/>
+                            <span style="color:red">{{ error }}</span>
+                        {% endfor %}
+                    </div>  
+                   
+                {% endif %}
+
+            {% endif %}
             <br/>
             <div id="card-contact" class="card pt-2">
                 <h4 class="px-2">Contacts
                     <span class="float-end">
                         {% if contactformset.total_form_count > 1 %}
                             <button type="button" class="btn btn-success btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_contact" aria-expanded="false" aria-controls="open_contact">
-                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                                <i class="fa-solid fa-chevron-down fa-lg"></i>
                             </button>
                         {% else %}
                             <button type="button" class="btn btn-danger btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_contact" aria-expanded="false" aria-controls="open_contact">
-                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                                <i class="fa-solid fa-chevron-down fa-lg"></i>
                             </button>
                         {% endif %}
                     </span>
@@ -212,11 +237,11 @@
                     <span class="float-end">
                         {% if supplier_filled_forms %}
                             <button type="button" class="btn btn-success btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_supplier" aria-expanded="false" aria-controls="open_supplier">
-                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                                <i class="fa-solid fa-chevron-down fa-lg"></i>
                             </button>
                         {% else %}
                             <button type="button" class="btn btn-danger btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_supplier" aria-expanded="false" aria-controls="open_supplier">
-                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                                <i class="fa-solid fa-chevron-down fa-lg"></i>
                             </button>
                         {% endif %}
                     </span>
@@ -290,11 +315,11 @@
                     <span class="float-end">
                         {% if customer_filled_forms %}
                             <button type="button" class="btn btn-success btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_customer" aria-expanded="false" aria-controls="open_customer">
-                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                                <i class="fa-solid fa-chevron-down fa-lg"></i>
                             </button>
                         {% else %}
                             <button type="button" class="btn btn-danger btn-sm rounded-circle text-center py-2" data-bs-toggle="collapse" data-bs-target="#open_customer" aria-expanded="false" aria-controls="open_customer">
-                                <i class="fa-solid fa-chevron-down fa-lg py-2"></i>
+                                <i class="fa-solid fa-chevron-down fa-lg"></i>
                             </button>
                         {% endif %}
                     </span>
@@ -375,7 +400,7 @@
                     <div class="form-inline buttons">
                         <button type="submit" class="btn btn-success"><i class="fa-regular fa-circle-check"></i> Save</button>
                         <span class="float-end">
-                            <a href="{% url 'persons:persons_list' %}" class="btn btn-danger">
+                            <a href="{% url 'persons:persons_list' %}?active_only=on" class="btn btn-danger">
                                 <i class="fa-regular fa-circle-xmark"></i> Cancel
                             </a>
                         </span>

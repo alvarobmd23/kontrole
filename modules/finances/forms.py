@@ -1,5 +1,6 @@
 from django import forms
-from django.forms import DateInput, NumberInput, Select, TextInput
+from django.forms import (CheckboxInput, DateInput, NumberInput, Select,
+                          TextInput)
 
 from .models import (AnaliticAccount, DocumentType, Entry, EntryItem,
                      SinteticAccount)
@@ -15,7 +16,11 @@ class SinteticAccount_Form(forms.ModelForm):
 
     class Meta:
         model = SinteticAccount
-        fields = ['accountsType', 'sinteticName']
+        fields = [
+            'accountsType',
+            'sinteticName',
+            'locked'
+        ]
         widgets = {
             'accountsType': Select(attrs={
                 'class': "form-select",
@@ -27,6 +32,9 @@ class SinteticAccount_Form(forms.ModelForm):
                 'style': "max-width: 300px",
                 'placeholder': "Sintetic Name"
             }),
+            'locked': CheckboxInput(attrs={
+                'class': "form-check-input"
+            }),
         }
 
 
@@ -36,13 +44,20 @@ class AnaliticAccount_Form(forms.ModelForm):
         self.user = user
         super(AnaliticAccount_Form, self).__init__(*args, **kwargs)
         self.fields['sinteticAccounts'].queryset = (
-            SinteticAccount.objects.filter(company=user.company).
+            SinteticAccount.objects.filter(
+                company=user.company
+            ).
             order_by('accountsType', 'sinteticName')
         )
 
     class Meta:
         model = AnaliticAccount
-        fields = ['sinteticAccounts', 'analiticName']
+        fields = [
+            'sinteticAccounts',
+            'analiticName',
+            'locked',
+            'active'
+        ]
         widgets = {
             'sinteticAccounts': Select(attrs={
                 'class': "form-select",
@@ -54,6 +69,12 @@ class AnaliticAccount_Form(forms.ModelForm):
                 'style': "max-width: 300px",
                 'placeholder': "Analitic Name"
             }),
+            'locked': CheckboxInput(attrs={
+                'class': "form-check-input"
+            }),
+            'active': CheckboxInput(attrs={
+                'class': "form-check-input"
+            }),
         }
 
 
@@ -64,12 +85,22 @@ class DocumentType_Form(forms.ModelForm):
 
     class Meta:
         model = DocumentType
-        fields = ['documentTypeDescription']
+        fields = [
+            'documentTypeDescription',
+            'locked',
+            'active'
+        ]
         widgets = {
             'documentTypeDescription': TextInput(attrs={
                 'class': "form-control",
                 'style': "max-width: 300px",
                 'placeholder': "Document Type"
+            }),
+            'locked': CheckboxInput(attrs={
+                'class': "form-check-input"
+            }),
+            'active': CheckboxInput(attrs={
+                'class': "form-check-input"
             }),
         }
 
@@ -81,14 +112,17 @@ class Entry_Form(forms.ModelForm):
         self.user = user
         super(Entry_Form, self).__init__(*args, **kwargs)
         self.fields['entryDocumentType'].queryset = (
-            DocumentType.objects.filter(company=user.company).
+            DocumentType.objects.filter(
+                company=user.company,
+                active=True
+            ).
             order_by('documentTypeDescription')
         )
 
     class Meta:
         model = Entry
         fields = [
-            'entryDate',
+            'date',
             'entryDocumentType',
             'entryNumDocument',
             'entryTotalValue',
@@ -98,7 +132,7 @@ class Entry_Form(forms.ModelForm):
             'entryTotalDebit'
             ]
         widgets = {
-            'entryDate': DateInput(attrs={
+            'date': DateInput(attrs={
                 'type': "date",
                 'class': "form-control",
                 'style': "max-width: 200px",
@@ -149,9 +183,13 @@ class ItemEntry_Form(forms.ModelForm):
         self.user = user
         super(ItemEntry_Form, self).__init__(*args, **kwargs)
         self.fields['itemEntryAccount'].queryset = (
-            AnaliticAccount.objects.filter(company=user.company).
+            AnaliticAccount.objects.filter(
+                company=user.company,
+                active=True
+            ).
             order_by(
                 'sinteticAccounts',
+                'analiticName',
             )
         )
 

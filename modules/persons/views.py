@@ -1,9 +1,13 @@
 from django.contrib import messages
+from django.db.models import ProtectedError
 from django.forms import inlineformset_factory
 from django.http import HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, DeleteView, UpdateView
+
+from core.main.decorators import lock_verification
 
 from .forms import (PaymentTerms_Form, PaymentTermsDays_Form, Person_Form,
                     PersonContact_Form, PersonCustomer_Form, PersonSeller_Form,
@@ -16,8 +20,21 @@ from .models import (PaymentTerms, PaymentTermsDays, Person, PersonContact,
 
 def paymentTerms_list(request):
     template_name = 'paymentTerms/paymentTerms_list.html'
-    object = PaymentTerms.objects.all().filter(company=request.user.company)
-    context = {'object_list': object}
+    active_only = request.GET.get('active_only', 'off') == 'on'
+
+    if active_only is True:
+        object = PaymentTerms.objects.all().filter(
+            company=request.user.company,
+            active=active_only
+        )
+    else:
+        object = PaymentTerms.objects.all().filter(
+            company=request.user.company
+        )
+    context = {
+        'object_list': object,
+        'active_only': active_only
+    }
     return render(request, template_name, context)
 
 
@@ -58,6 +75,7 @@ def paymentTerms_add(request):
                 form.company = request.user.company
                 form.user_created = request.user
                 form.user_updated = request.user
+                form.active = True
                 form = form.save()
                 formset = formset.save()
                 messages.success(request,
@@ -65,7 +83,7 @@ def paymentTerms_add(request):
                                  'alert-success'
                                  )
                 return HttpResponseRedirect(
-                    reverse_lazy('persons:paymentTerms')
+                    f"{reverse_lazy('persons:paymentTerms')}?active_only=on"
                     )
             else:
                 form = PaymentTerms_Form(
@@ -103,6 +121,7 @@ def paymentTerms_add(request):
     return render(request, template_name, context)
 
 
+@lock_verification(PaymentTerms)
 def paymentTerms_edit(request, pk):
     template_name = 'paymentTerms/paymentTerms_form.html'
     paymentTerms_form = PaymentTerms.objects.filter(
@@ -140,7 +159,7 @@ def paymentTerms_edit(request, pk):
                                  'alert-success'
                                  )
                 return HttpResponseRedirect(
-                    reverse_lazy('persons:paymentTerms')
+                    f"{reverse_lazy('persons:paymentTerms')}?active_only=on"
                     )
             else:
                 form = PaymentTerms_Form(
@@ -183,30 +202,61 @@ def paymentTerms_edit(request, pk):
         'form': form,
         'formset': formset,
         'object': paymentTerms_form,
-        'formset_errors': formset.errors,
+        'formset_errors': formset.errors
     }
     return render(request, template_name, context)
 
 
+@method_decorator(lock_verification(PaymentTerms), name='dispatch')
 class PaymentTerms_Delete(DeleteView):
     model = PaymentTerms
     success_url = reverse_lazy('persons:paymentTerms')
 
+    def get_success_url(self):
+        url = super().get_success_url()
+        return f"{url}?active_only=on"
+
+    def get_queryset(self):
+        company_user = self.request.user.company
+        return PaymentTerms.objects.filter(company=company_user)
+
     def get(self, request, *args, **kwargs):
-        context = messages.warning(
-            request,
-            'Payment Term successfully deleted!',
-            'alert-warning'
-        )
-        return self.delete(context, request, *args, **kwargs)
+        self.object = self.get_object()
+        try:
+            self.object.delete()
+            messages.warning(
+                request,
+                'Payment Term successfully deleted!',
+                'alert-warning'
+            )
+        except ProtectedError:
+            messages.error(
+                request,
+                'This Payment Term is being used by some Person!',
+                'alert-danger'
+            )
+        return redirect(request.META.get('HTTP_REFERER', self.success_url))
 
 
 # Persons Views
 
 def persons_list(request):
     template_name = 'persons/persons_list.html'
-    object = Person.objects.all().filter(company=request.user.company)
-    context = {'object_list': object}
+    active_only = request.GET.get('active_only', 'off') == 'on'
+
+    if active_only is True:
+        object = Person.objects.all().filter(
+            company=request.user.company,
+            active=active_only
+        )
+    else:
+        object = Person.objects.all().filter(
+            company=request.user.company
+        )
+    context = {
+        'object_list': object,
+        'active_only': active_only
+    }
     return render(request, template_name, context)
 
 
@@ -283,6 +333,7 @@ def persons_add(request):
             form.company = request.user.company
             form.user_created = request.user
             form.user_updated = request.user
+            form.active = True
             form = form.save()
             contactformset = contactformset.save()
             supplierformset = supplierformset.save()
@@ -293,7 +344,7 @@ def persons_add(request):
                 'alert-success'
             )
             return HttpResponseRedirect(
-                reverse_lazy('persons:persons_list')
+                f"{reverse_lazy('persons:persons_list')}?active_only=on"
             )
         else:
             form = Person_Form(
@@ -349,6 +400,7 @@ def persons_add(request):
     return render(request, template_name, context)
 
 
+@lock_verification(Person)
 def persons_edit(request, pk):
     template_name = 'persons/persons_form.html'
     persons_form = Person.objects.filter(
@@ -426,7 +478,7 @@ def persons_edit(request, pk):
                 'alert-success'
             )
             return HttpResponseRedirect(
-                reverse_lazy('persons:persons_list')
+                f"{reverse_lazy('persons:persons_list')}?active_only=on"
             )
         else:
             form = Person_Form(
@@ -484,6 +536,7 @@ def persons_edit(request, pk):
     customer_filled_forms = has_filled_forms(customerformset)
 
     context = {
+        'object': persons_form,
         'form': form,
         'contactformset': contactformset,
         'supplierformset': supplierformset,
@@ -494,17 +547,35 @@ def persons_edit(request, pk):
     return render(request, template_name, context)
 
 
+@method_decorator(lock_verification(Person), name='dispatch')
 class Persons_Delete(DeleteView):
     model = Person
     success_url = reverse_lazy('persons:persons_list')
 
+    def get_success_url(self):
+        url = super().get_success_url()
+        return f"{url}?active_only=on"
+
+    def get_queryset(self):
+        company_user = self.request.user.company
+        return Person.objects.filter(company=company_user)
+
     def get(self, request, *args, **kwargs):
-        context = messages.warning(
-            request,
-            'Person successfully deleted!',
-            'alert-warning'
-        )
-        return self.delete(context, request, *args, **kwargs)
+        self.object = self.get_object()
+        try:
+            self.object.delete()
+            messages.warning(
+                request,
+                'Person successfully deleted!',
+                'alert-warning'
+            )
+        except ProtectedError:
+            messages.error(
+                request,
+                'This Person is being used by some Register!',
+                'alert-danger'
+            )
+        return redirect(request.META.get('HTTP_REFERER', self.success_url))
 
 
 # Seller
@@ -512,8 +583,21 @@ class Persons_Delete(DeleteView):
 
 def seller_list(request):
     template_name = 'sellers/seller_list.html'
-    object = PersonSeller.objects.all().filter(company=request.user.company)
-    context = {'object_list': object}
+    active_only = request.GET.get('active_only', 'off') == 'on'
+
+    if active_only is True:
+        object = PersonSeller.objects.all().filter(
+            company=request.user.company,
+            active=active_only
+        )
+    else:
+        object = PersonSeller.objects.all().filter(
+            company=request.user.company
+        )
+    context = {
+        'object_list': object,
+        'active_only': active_only
+    }
     return render(request, template_name, context)
 
 
@@ -523,11 +607,21 @@ class Seller_add(CreateView):
     template_name = 'sellers/seller_form.html'
     success_url = reverse_lazy('persons:seller_list')
 
+    def get_success_url(self):
+        url = super().get_success_url()
+        return f"{url}?active_only=on"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
     def form_valid(self, form):
         form_instance = form.save(commit=False)
         form_instance.company = self.request.user.company
         form_instance.user_created = self.request.user
         form_instance.user_updated = self.request.user
+        form_instance.active = True
         form_instance = form.save()
         messages.success(
             self.request,
@@ -537,11 +631,21 @@ class Seller_add(CreateView):
         return super(Seller_add, self).form_valid(form)
 
 
+@method_decorator(lock_verification(PersonSeller), name='dispatch')
 class Seller_edit(UpdateView):
     model = PersonSeller
     form_class = PersonSeller_Form
     template_name = 'sellers/seller_form.html'
     success_url = reverse_lazy('persons:seller_list')
+
+    def get_success_url(self):
+        url = super().get_success_url()
+        return f"{url}?active_only=on"
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
 
     def form_valid(self, form):
         form_instance = form.save(commit=False)
@@ -556,14 +660,32 @@ class Seller_edit(UpdateView):
         return super(Seller_edit, self).form_valid(form)
 
 
+@method_decorator(lock_verification(PersonSeller), name='dispatch')
 class Seller_Delete(DeleteView):
     model = PersonSeller
     success_url = reverse_lazy('persons:seller_list')
 
+    def get_success_url(self):
+        url = super().get_success_url()
+        return f"{url}?active_only=on"
+
+    def get_queryset(self):
+        company_user = self.request.user.company
+        return PersonSeller.objects.filter(company=company_user)
+
     def get(self, request, *args, **kwargs):
-        context = messages.warning(
-            request,
-            'Seller successfully deleted!',
-            'alert-warning'
-        )
-        return self.delete(context, request, *args, **kwargs)
+        self.object = self.get_object()
+        try:
+            self.object.delete()
+            messages.warning(
+                request,
+                'Seller successfully deleted!',
+                'alert-warning'
+            )
+        except ProtectedError:
+            messages.error(
+                request,
+                'This Seller is being used by some Register!',
+                'alert-danger'
+            )
+        return redirect(request.META.get('HTTP_REFERER', self.success_url))

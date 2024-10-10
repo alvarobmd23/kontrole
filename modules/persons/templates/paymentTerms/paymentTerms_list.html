@@ -1,25 +1,69 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Payment Terms - Kontrole by Arguo{% endblock title %}
 
-{% block content %}
-<div class="page-header bg-light pt-1 mb-2">
-    <h2 class="text-dark"><i class="fa-solid fa-money-check-dollar"></i> Payment Terms</h2>
-</div>
+{% block css %}
+<link rel="stylesheet" href="{% static 'css/table-filter.css' %}">
+{% endblock css %}
 
+{% block content %}
+
+<!-- Include head with active and find in template -->
+{% with head_title="<i class='fa-solid fa-money-check-dollar'></i> Payment Terms" %}
+    {% include "includes/headactive.html" %}
+{% endwith %}
 
 <div class="col"></div>
 <div class="col col-10 col-lg-6">
 
     {% if object_list %}
     <table class="table table-hover table-responsive" style="z-index:999">
+        <thead>
+            <th>Description</th>
+            <th class="text-center">Active</th>
+            <th></th>
+        </thead>
         <tbody>
             {% for object in object_list %}
             <tr>
-                <td><a href="{{ object.get_absolute_url }}">{{ object.paymentTermDescription }}</a></td>
+                <td>
+                    {{ object.paymentTermDescription }}
+                    {% if user.hierarchy == 3 %}
+                    {% else %}
+                        {% if object.locked == False %}
+                            <span style="display: none;">open</span>
+                        {% else %}
+                            <span style="display: none;">lock</span>
+                            <i class="fa-solid fa-lock" style="color: #8c40d9;"></i>
+                        {% endif %}
+                    {% endif %}
+                </td>
+                <td class="text-center align-middle">
+                    {% if object.active is True %}
+                        <span style="display: none;">active</span>
+                        <i class="fa-solid fa-circle-check text-success"></i>
+                    {% else %}
+                        <span style="display: none;">inactive</span>
+                        <i class="fa-solid fa-circle-xmark text-secondary"></i>
+                    {% endif %}
+                </td>
                 <td class="text-center">
-                    <a href="{% url 'persons:paymentTerms_edit' object.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
-                    <a onclick="return confirm('Are you sure you want to delete the Payment Term *{{ object }}*?');" href="{% url 'persons:paymentTerms_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
+                    <a href="{{ object.get_absolute_url }}">
+                        <i class="fa-solid fa-eye text-secondary"></i>
+                    </a>
+                    {% if user.hierarchy == 3 and object.locked == True %}
+                        <a href="{% url 'persons:paymentTerms_edit' object.pk %}">
+                            <span style="display: none;">lock</span>
+                            <i class="fa-solid fa-lock" style="color: #8c40d9;"></i>
+                        </a>
+                    {% else %}
+                        <a href="{% url 'persons:paymentTerms_edit' object.pk %}">
+                            <span style="display: none;">open</span>
+                            <i class="fa-solid fa-pen-to-square text-primary"></i>
+                        </a>
+                        <a onclick="return confirm('Are you sure you want to delete the Payment Term *{{ object }}*?');" href="{% url 'persons:paymentTerms_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
+                    {% endif %}
                 </td>
             </tr>            
             {% endfor %}
@@ -50,6 +94,8 @@
         </div>
     </div>
 </div>
-
-
 {% endblock content %}
+
+{% block js %}
+<script src="{% static 'js/table-filter.js' %}"></script>
+{% endblock js %}

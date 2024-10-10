@@ -8,7 +8,7 @@
         <i class="fa-solid fa-money-check-dollar"></i> Payment Terms - {{ object }}
     </h2>
     <span class="align-text-bottom float-end">
-        <a class="btn btn-danger" href="{% url 'persons:paymentTerms' %}">
+        <a class="btn btn-danger" href="{% url 'persons:paymentTerms' %}?active_only=on">
             <i class="fa-solid fa-rotate-left"></i> Return
         </a>
         <a class="btn btn-primary" href="{% url 'persons:paymentTerms_edit' object.pk %}">

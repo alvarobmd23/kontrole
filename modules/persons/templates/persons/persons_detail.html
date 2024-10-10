@@ -6,10 +6,10 @@
 <div class="row">
     <div class="page-header bg-light pt-1 mb-2">
         <h2 class="text-dark float-start">
-            <i class="fa-solid fa-user"></i> Person - {{ object.personName }}
+            <i class="fa-solid fa-user"></i> Person - {{ object.personName }} <span>{% if object.active is True %}(Active){% else %}(Inactive){% endif %}</span>
         </h2>
         <span class="align-text-bottom float-end">
-            <a class="btn btn-danger" href="{% url 'persons:persons_list' %}">
+            <a class="btn btn-danger" href="{% url 'persons:persons_list' %}?active_only=on">
                 <i class="fa-solid fa-rotate-left"></i> Return
             </a>
             <a class="btn btn-primary" href="{% url 'persons:persons_edit' object.pk %}">

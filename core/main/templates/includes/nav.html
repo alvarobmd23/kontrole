@@ -17,10 +17,10 @@
                         Persons
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="{% url 'persons:persons_list' %}"><i class="fa-solid fa-users"></i> Registrations</a></li>
-                        <li><a class="dropdown-item" href="{% url 'persons:seller_list' %}"><i class="fa-solid fa-user-tag"></i> Sellers</a></li>
+                        <li><a class="dropdown-item" href="{% url 'persons:persons_list' %}?active_only=on"><i class="fa-solid fa-users"></i> Registrations</a></li>
+                        <li><a class="dropdown-item" href="{% url 'persons:seller_list' %}?active_only=on"><i class="fa-solid fa-user-tag"></i> Sellers</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url 'persons:paymentTerms' %}"><i class="fa-solid fa-money-check-dollar"></i> Payment Terms</a></li>
+                        <li><a class="dropdown-item" href="{% url 'persons:paymentTerms' %}?active_only=on"><i class="fa-solid fa-money-check-dollar"></i> Payment Terms</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Reports</a></li>
                     </ul>
@@ -34,11 +34,16 @@
                         <li><a class="dropdown-item" href="#">Buys</a></li>
                         <li><a class="dropdown-item" href="#">Sells</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="#">Stock</a></li>
+                        <li><a class="dropdown-item" href="#">Inventory</a></li>
                         <li><a class="dropdown-item" href="#">Transformation</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Products</a></li>
                         <li><a class="dropdown-item" href="#">Products Group</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Rendering of Services</a></li>
+                        <li><a class="dropdown-item" href="#">Services</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Movement Type</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Reports</a></li>
                     </ul>
@@ -52,10 +57,10 @@
                         <li><a class="dropdown-item" href="#">Bills</a></li>
                         <li><a class="dropdown-item" href="#">Receivable</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url 'finances:entrys_list' %}">Entrys</a></li>
+                        <li><a class="dropdown-item" href="{% url 'finances:entrys_list' %}"><i class="fa-solid fa-money-bill-transfer"></i> Entrys</a></li>
                         <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="{% url 'finances:chartOfAccounts' %}"><i class="fa-solid fa-list-ol"></i> Chart of Accounts</a></li>
-                        <li><a class="dropdown-item" href="{% url 'finances:documentType_list' %}"><i class="fa-solid fa-paste"></i> Document Type</a></li>
+                        <li><a class="dropdown-item" href="{% url 'finances:chartOfAccounts' %}?active_only=on"><i class="fa-solid fa-list-ol"></i> Chart of Accounts</a></li>
+                        <li><a class="dropdown-item" href="{% url 'finances:documentType_list' %}?active_only=on"><i class="fa-solid fa-paste"></i> Document Type</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#">Reports</a></li>
                     </ul>

@@ -69,6 +69,12 @@ class Person (models.Model):
         blank=True,
         null=True
     )
+    active = models.BooleanField(
+        default=True
+    )
+    locked = models.BooleanField(
+        default=False
+    )
     user_created = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
@@ -171,6 +177,12 @@ class PaymentTerms(models.Model):
         decimal_places=2,
         default=0
     )
+    active = models.BooleanField(
+        default=True
+    )
+    locked = models.BooleanField(
+        default=False
+    )
     user_created = models.ForeignKey(
         User,
         on_delete=models.DO_NOTHING,
@@ -260,8 +272,14 @@ class PersonSeller (models.Model):
         _("sellerNickname"),
         max_length=300,
         unique=True,
-        blank=True,
-        null=True
+        blank=False,
+        null=False
+    )
+    active = models.BooleanField(
+        default=True
+    )
+    locked = models.BooleanField(
+        default=False
     )
     user_created = models.ForeignKey(
         User,
@@ -286,7 +304,7 @@ class PersonSeller (models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ('pk',)
+        ordering = ('sellerNickname',)
 
     def __str__(self):
         return '{}'.format(
@@ -415,4 +433,3 @@ class PersonSupplier(models.Model):
             self.supllierFinDiscountPercentage,
             self.supllierPaymentTerms
         )
-

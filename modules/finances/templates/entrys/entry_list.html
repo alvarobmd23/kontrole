@@ -8,19 +8,11 @@
 {% endblock css %}
 
 {% block content %}
-<div class="page-header bg-light pt-1 mb-2 d-flex justify-content-between">
-    <div>
-        <h2 class="text-dark"><i class="fa-solid fa-money-bill-transfer"></i> Entrys</h2>
-    </div>
-    <div class="input-group pb-1" style="width: auto;">
-        <div class="form-outline d-flex align-items-center">
-            <input id="filterInput" type="search" class="form-control"/>
-            <div class="search-input ms-2 text-secondary">
-                <i id="searchIcon" class="fa-solid fa-magnifying-glass"></i>
-            </div>
-        </div>
-    </div>
-</div>
+
+<!-- Include head find in template -->
+{% with head_title="<i class='fa-solid fa-money-bill-transfer'></i> Entrys" %}
+    {% include "includes/head.html" %}
+{% endwith %}
 
 <div class="col"></div>
 <div class="col col-10">
@@ -31,27 +23,48 @@
             <tr>
                 <th>Document</th>
                 <th>Date</th>
-                <th>Value</th>
+                <th>Id Fin.</th>
+                <th>Id Com.</th>
+                <th class="text-center">Value</th>
                 <th style="display: none;">Description</th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
             {% for object in object_list %}
-            <tr data-bs-toggle="tooltip" data-bs-html="true" data-bs-placement="bottom" data-bs-original-title='
-                <div>
-                    <b>Description:</b> {{ object.entryDescription }}
-                </div>
-            '>
+            <tr>
                 <td>
-                    <a href="{{ object.get_absolute_url }}">{{ object.entryDocumentType }}: {{ object.entryNumDocument }}</a>
+                    <span
+                        data-bs-toggle="tooltip"
+                        data-bs-html="true"
+                        data-bs-placement="right"
+                        data-bs-original-title='
+                        <div>
+                            <b>Description:</b> {{ object.entryDescription }}
+                        </div>'
+                    >
+                        {{ object.entryDocumentType }}: {{ object.entryNumDocument }}
+                    </span>
                 </td>
-                <td>{{ object.entryDate | date:"d/m/Y" }}</td>
-                <td>{{ object.entryTotalValue }}</td>
+                <td>{{ object.date | date:"d/m/Y" }}</td>
+                <td></td>
+                <td></td>
+                <td class="text-center">{{ object.entryTotalValue }}</td>
                 <td style="display: none;">{{ object.entryDescription }}</td>
-                <td class="text-center">
-                    <a href="{% url 'finances:entrys_edit' object.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
-                    <a onclick="return confirm('Are you sure you want to delete the Document *{{ object.entryDocumentType }}: {{ object.entryNumDocument }}*?');" href="{% url 'finances:entrys_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
+                <td class="text-center align-middle">
+                    <a href="{{ object.get_absolute_url }}">
+                        <i class="fa-solid fa-eye text-secondary"></i>
+                    </a>
+                    {% if user.company.auditDate is none or object.date > user.company.auditDate %}
+                        <span style="display: none;">unaudit open</span>
+                        <a href="{% url 'finances:entrys_edit' object.pk %}"><i class="fa-solid fa-pen-to-square text-primary"></i></a>
+                        <a onclick="return confirm('Are you sure you want to delete the Document *{{ object.entryDocumentType }}: {{ object.entryNumDocument }}*?');" href="{% url 'finances:entrys_delete' object.pk %}"><i class="fa-solid fa-trash-can text-danger"></i></a>
+                    {% else %}
+                        <span style="display: none;">audited lock</span>
+                        <a href="{% url 'finances:entrys_edit' object.pk %}" data-bs-toggle="tooltip" data-bs-placement="right" data-bs-original-title='Audited'>
+                            <i class="fa-solid fa-lock" style="color: #8c40d9;"></i>
+                        </a>
+                    {% endif %}
                 </td>
             </tr>            
             {% endfor %}
